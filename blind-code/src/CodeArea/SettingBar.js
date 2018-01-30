@@ -111,9 +111,7 @@ class SettingBar extends React.Component {
     fontSize: 14
   }
   
-  handleChange() {
-
-  }
+  
 
   render() {
 
@@ -138,7 +136,7 @@ class SettingBar extends React.Component {
       </FormControl>
 
 
-      <FormControl style={styles}>
+      {/* <FormControl style={styles}>
         <InputLabel htmlFor="theme-helper">Theme</InputLabel>
         <Select
           value={this.props.theme}
@@ -153,11 +151,11 @@ class SettingBar extends React.Component {
           }
 
         </Select>
-      </FormControl>
+      </FormControl> */}
 
 
-      <FormControl style={styles}>
-        <InputLabel htmlFor="theme-helper">Theme</InputLabel>
+      {/* <FormControl style={styles}>
+        <InputLabel htmlFor="theme-helper">Font Size</InputLabel>
         <Select
           value={this.props.fontSize}
           onChange={this.props.onFontChange}
@@ -174,7 +172,7 @@ class SettingBar extends React.Component {
           };
 
           </Select>
-      </FormControl>
+      </FormControl> */}
 
 
     </ToolBar>;

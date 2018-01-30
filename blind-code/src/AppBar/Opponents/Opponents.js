@@ -10,14 +10,14 @@ class Opponents extends React.Component{
 render(){
     return <div className="Opponents">
 
-<Badge badgeContent={4} color="primary"><span>  ramu <Person/> </span> 
+<Badge badgeContent={this.props.result} color="primary"><span>  {this.props.name} <Person/> </span> 
  </Badge>
 
-  <Apps/> 
+  {/* <Apps/> 
   
   <Badge  badgeContent={3} color="accent">
   <span> <Person/> kalu  </span>
-  </Badge>
+  </Badge>  */}
 
     </div>;
 }

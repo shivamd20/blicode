@@ -12,7 +12,11 @@ class ProblemArea extends Component {
 
         return <section className="ProblemArea" >
         
-        Write a program to add two numbers.
+       <div > {this.props.problem} </div>
+        <br/>
+
+        Sample input : {this.props.sampleIp} <br/>
+         Sample Output : {this.props.sampleOp} 
         
         </section>;
     }

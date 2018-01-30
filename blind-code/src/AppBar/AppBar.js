@@ -72,30 +72,30 @@ class MenuAppBar extends React.Component {
             top:0
           }
         }
-        title="CodeChamp"
+        title="Blind Coding"
         >
           <Toolbar style={{
-              'background-color':'black',
+              'background-color':'darkslategray',
               textAlign:'center'
           }
           }>
 
         
 
-            <IconButton className={classes.menuButton} color="contrast" aria-label="Menu">
+            {/* <IconButton className={classes.menuButton}  aria-label="Menu">
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
 
-            <Opponents/>
+            <Opponents result= {this.props.result} name = {this.props.name}/>
             <Typography type="title" color="inherit" className={classes.flex}>
           
             <div className={classes.root}>
             
               </div>
-              Code Champ
+              Blind Coding
             </Typography>
 
-            <Time/>
+            <Time time = {this.props.time}/>
 
             {auth && (
               <div>
@@ -124,7 +124,11 @@ class MenuAppBar extends React.Component {
                   onClose={this.handleClose}
                 >
                   <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  <MenuItem onClick={()=>{
+
+                    localStorage.removeItem('hasura_token');
+
+                  }}>Logout</MenuItem>
                 </Menu>
 
               </div>

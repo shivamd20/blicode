@@ -9,6 +9,7 @@
     "react-ace": "^5.8.0",
     "react-dom": "^16.2.0",
     "react-scripts": "^1.0.17",
+    "socket.io-client": "^2.0.4",
     "typeface-roboto": "0.0.45"
   },
   "scripts": {

@@ -10,6 +10,7 @@ import green from 'material-ui/colors/green';
 import CheckIcon from 'material-ui-icons/Check';
 import ErrorIcon from 'material-ui-icons/Error';
 import TextField from 'material-ui/TextField';
+import lightBlue from 'material-ui/colors/lightBlue';
 
 var glotlanguages = [
     "assembly", //
@@ -289,8 +290,8 @@ class CodeArea extends Component {
      
         theme: 'monokai',
         mode: 'java',
-        enableBasicAutocompletion: true,
-        enableLiveAutocompletion: true,
+        enableBasicAutocompletion: false,
+        enableLiveAutocompletion: false,
         fontSize: 14,
         showGutter: true,
         showPrintMargin: true,
@@ -302,13 +303,61 @@ class CodeArea extends Component {
         loading:false,
         success:false,
 
+        editorFilter :undefined
+
       };
   
     //       render(){
     //     return <section className="CodeArea">I am CodeArea"</section>;
     // }
 
+
+
     render(){
+
+      const editor =  <AceEditor
+      style={{
+          width:'95vw',
+          filter: this.state.editorFilter
+      }}
+      mode={this.state.mode}
+      theme={this.state.theme}
+      name="UNIQUE_ID_OF_DIV"
+      editorProps={{ $blockScrolling: true }}
+      enableBasicAutocompletion={this.state.enableBasicAutocompletion}
+      enableLiveAutocompletion={this.state.enableLiveAutocompletion}
+      showSettingsMenu={true}
+      mode={this.state.mode}
+      theme={this.state.theme}
+      name="blah2"
+      onLoad={this.onLoad}
+  
+      // onChange={(value) => {
+      //   this.state.code = value;
+  
+      //   console.log("value changed");
+  
+      //   //alert(this.state.body);
+  
+      // }}
+  
+      onChange={this.props.onCodeChange}
+  
+      fontSize={this.state.fontSize}
+      showPrintMargin={this.state.showPrintMargin}
+      showGutter={this.state.showGutter}
+      highlightActiveLine={this.state.highlightActiveLine}
+      value={this.props.code}
+      setOptions={{
+        enableBasicAutocompletion: this.state.enableBasicAutocompletion,
+        enableLiveAutocompletion: this.state.enableLiveAutocompletion,
+        enableSnippets: this.state.enableSnippets,
+        showLineNumbers: this.state.showLineNumbers,
+        tabSize: 2,
+      }}
+    />
+
+
 
   
 return <div>
@@ -321,6 +370,7 @@ theme={this.state.theme}
   this.setState({
    language:value.target.value
  })
+
 
  this.props.onLanguageChange(value.target.value);
 
@@ -335,6 +385,7 @@ theme={this.state.theme}
 
  }}
 onThemeChange={(value)=>{
+  alert(JSON.stringify(editor.editor));
   this.setState({
    theme:value.target.value
  })
@@ -342,46 +393,36 @@ onThemeChange={(value)=>{
 
 />
 
+<button onClick={()=>{
+  this.setState({
+    editorFilter : this.state.editorFilter ? undefined : 'blur(5px)'
+  });
+}}>
 
- <AceEditor
-    style={{
-        width:'95vw',
-    }}
-    mode={this.state.mode}
-    theme={this.state.theme}
-    name="UNIQUE_ID_OF_DIV"
-    editorProps={{ $blockScrolling: true }}
-    enableBasicAutocompletion={this.state.enableBasicAutocompletion}
-    enableLiveAutocompletion={this.state.enableLiveAutocompletion}
-    showSettingsMenu={true}
-    mode={this.state.mode}
-    theme={this.state.theme}
-    name="blah2"
-    onLoad={this.onLoad}
-    // onChange={(value) => {
-    //   this.state.code = value;
+toggle blur
 
-    //   console.log("value changed");
+ </button>
 
-    //   //alert(this.state.body);
+ {
+  // editor
+ }
 
-    // }}
+<br/> 
+<textarea
+ style={{
+          width:'95vw',
+          height:'500px',
+          filter: this.state.editorFilter,
+          color : "skyBlue",
+          backgroundColor: '#191919'
+      }} 
 
-    onChange={this.props.onCodeChange}
+      onChange={this.props.onCodeChange}
 
-    fontSize={this.state.fontSize}
-    showPrintMargin={this.state.showPrintMargin}
-    showGutter={this.state.showGutter}
-    highlightActiveLine={this.state.highlightActiveLine}
-    value={this.props.code}
-    setOptions={{
-      enableBasicAutocompletion: this.state.enableBasicAutocompletion,
-      enableLiveAutocompletion: this.state.enableLiveAutocompletion,
-      enableSnippets: this.state.enableSnippets,
-      showLineNumbers: this.state.showLineNumbers,
-      tabSize: 2,
-    }}
-  />
+      value = {this.props.code}
+      
+      ></textarea>
+
   
   <Typography >
   
@@ -411,6 +452,7 @@ onThemeChange={(value)=>{
 
           onChange={this.props.onInputChange}
           margin="normal"
+        
         />
        
          
