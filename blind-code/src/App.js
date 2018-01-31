@@ -15,10 +15,14 @@ import Typography from 'material-ui/Typography';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import lightBlue from 'material-ui/colors/lightBlue';
 import Login from './SignIn';
+import AdditionalInfo from './AdditionalInformation';
 
 import io from 'socket.io-client';
+import { dark } from 'material-ui/styles/createPalette';
 
 const socket = io('https://api.calk49.hasura-app.io');
+
+
 
 const styles = theme => ({
   root: {
@@ -65,12 +69,21 @@ var State={
   version: 'latest',
   glotToken:'c5746811-352e-439e-82c8-4ca9dadb0eea',
   running:false,
-  hasura_id:0
+  hasura_id:0,
+  additional_info_filled : localStorage.additional_info_filled,
+  college :null,
+branch:null,
+email:null,
+mobile:null,
+name:null,
+semester:null
 }
   
 
 
 class App extends Component {
+
+ 
 
 state={
 
@@ -146,6 +159,44 @@ state={
 
 }
 
+checkForAdditionalInfo(){
+  socket.emit('querydata',{
+    "type": "select",
+    "args": {
+        "table": "user",
+        "columns": [
+            "*"
+        ],
+        "where": {
+            "user_id": {
+                "$eq": this.state.hasura_id
+            }
+        }
+    }
+},(a)=>{
+
+  if(a.status == 'ok' && a.data.length > 0){
+
+    this.setState({
+college :a.data[0].college,
+branch:a.data[0].branch,
+email:a.data[0].email,
+mobile:a.data[0].mobile,
+name:a.data[0].name,
+semester:a.data[0].semester,
+additional_info_filled : true
+    })
+  }
+  else{
+    this.setState({
+      additional_info_filled : true
+    })
+
+    localStorage.additional_info_filled = true;
+  }
+});
+}
+
 onSignIn(email,password){
 
   var options = {
@@ -175,13 +226,20 @@ onSignIn(email,password){
       alert('Login Successfull')
       console.log(d.data)
 
-      localStorage.setItem('hasura_token',d.data.auth_token);
+      socket.emit('settoken' , d.data.auth_token, (d)=>{console.log(d)});
+
+
+      localStorage.email = email
+      localStorage.hasura_token="Bearer "+d.data.auth_token;
+      localStorage.hasura_id = d.data.hasura_id;
 
       this.setState({
         token :d.data.auth_token,
         email : d.data.email,
         hasura_id : d.data.hasura_id
       })
+
+      this.checkForAdditionalInfo();
     }
     else
     alert('unexpected error');
@@ -228,6 +286,47 @@ onRegister(email,password){
 
 }
 
+onAdditionalInfoFilled(data){
+
+  alert(JSON.stringify(data))
+  socket.emit('querydata',{
+    "type": "insert",
+    "args": {
+        "table": "user",
+        "objects": [
+            {
+                "user_id": data.user_id,
+                "email": data.email,
+                "name": data.name,
+                "College": data.College,
+                "mobile": data.mobile,
+                "branch": data.branch,
+                "semester": data.semester,
+            }
+        ],
+        "returning": [
+            "user_id"
+        ],
+        " on_conflict ":'update'
+    }
+},(a)=>{
+
+  if(a.status == 'ok' && a.data.length > 0){
+
+    this.checkForAdditionalInfo();
+
+  }
+  else{
+    this.setState({
+      additional_info_filled : false
+    })
+
+    localStorage.additional_info_filled = false
+  }
+});
+
+}
+
 startTimer(){
   setInterval(()=>{
 
@@ -244,6 +343,14 @@ startTimer(){
 
 constructor(){
   super();
+
+  socket.on('connect', function(){
+
+    console.log(localStorage.getItem("hasura_token"))
+
+    socket.emit('settoken' , localStorage.getItem("hasura_token"), (d)=>{console.log(d)});
+
+  });
 
   this.startTimer();
 }
@@ -267,6 +374,17 @@ runResult(output,stderr,error){
        onRegister={(email,pwd)=>this.onRegister(email,pwd)} 
        onLogin = {(email,pwd)=>this.onSignIn(email,pwd)}
         /> :
+
+        !localStorage.additional_info_filled ? 
+        
+        <AdditionalInfo
+        open = {true}
+        onFilled = {(d)=>{
+          this.onAdditionalInfoFilled(d)
+        }}
+        />
+
+        : 
 
       <div >
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons"

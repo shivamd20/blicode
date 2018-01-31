@@ -126,7 +126,7 @@ class MenuAppBar extends React.Component {
                   <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                   <MenuItem onClick={()=>{
 
-                    localStorage.removeItem('hasura_token');
+                    localStorage.clear();
 
                   }}>Logout</MenuItem>
                 </Menu>
