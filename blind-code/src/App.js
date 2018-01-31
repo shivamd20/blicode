@@ -5,6 +5,7 @@ import AppBar from './AppBar/AppBar';
 import CodeArea from './CodeArea/CodeArea';
 import ProblemArea from './ProblemArea/ProblemArea';
 import PropTypes from 'prop-types';
+import Modal from 'material-ui/Modal';
 import { withStyles } from 'material-ui/styles';
 import RunResultArea from './RunResultArea';
 import ExpansionPanel, {
@@ -17,11 +18,12 @@ import lightBlue from 'material-ui/colors/lightBlue';
 import Login from './SignIn';
 import AdditionalInfo from './AdditionalInformation';
 
+import Loading from './Loading';
+
 import io from 'socket.io-client';
 import { dark } from 'material-ui/styles/createPalette';
 
 const socket = io('https://api.calk49.hasura-app.io');
-
 
 
 const styles = theme => ({
@@ -76,12 +78,15 @@ branch:null,
 email:null,
 mobile:null,
 name:null,
-semester:null
+semester:null,
+loading: false,
+loadingText: null
 }
   
-
-
 class App extends Component {
+
+
+
 
  
 
@@ -98,7 +103,7 @@ state={
  onRun(){
 
  this.setState({
-   running : true
+   running : true,
  })
 
   var options = {
@@ -160,6 +165,12 @@ state={
 }
 
 checkForAdditionalInfo(){
+
+  this.setState({
+    loading : true,
+    loadingText :'Check your information'
+  })
+
   socket.emit('querydata',{
     "type": "select",
     "args": {
@@ -169,13 +180,20 @@ checkForAdditionalInfo(){
         ],
         "where": {
             "user_id": {
-                "$eq": this.state.hasura_id
+                "$eq": localStorage.hasura_id
             }
         }
     }
 },(a)=>{
 
-  if(a.status == 'ok' && a.data.length > 0){
+  this.setState({
+    loading : false,
+    loadingText :null
+  })
+
+  alert(JSON.stringify(a))
+
+  if(a.status == 'ok' && a.data.length === 1){
 
     this.setState({
 college :a.data[0].college,
@@ -186,18 +204,22 @@ name:a.data[0].name,
 semester:a.data[0].semester,
 additional_info_filled : true
     })
-  }
-  else{
-    this.setState({
-      additional_info_filled : true
-    })
 
     localStorage.additional_info_filled = true;
+  }
+  else 
+  {
+
   }
 });
 }
 
 onSignIn(email,password){
+
+  this.setState({
+    loading : true,
+    loadingText :'Signing in'
+  })
 
   var options = {
     url : `https://auth.calk49.hasura-app.io/v1/login`,
@@ -217,6 +239,11 @@ onSignIn(email,password){
 
   socket.emit('proxyrq', options , (d)=>{
 
+    this.setState({
+      loading : false,
+      loadingText :null
+    })
+
    
    if(d.error)
     {
@@ -226,12 +253,14 @@ onSignIn(email,password){
       alert('Login Successfull')
       console.log(d.data)
 
-      socket.emit('settoken' , d.data.auth_token, (d)=>{console.log(d)});
 
 
       localStorage.email = email
       localStorage.hasura_token="Bearer "+d.data.auth_token;
       localStorage.hasura_id = d.data.hasura_id;
+
+
+      socket.emit('settoken' , localStorage.hasura_token, (d)=>{console.log(d)});
 
       this.setState({
         token :d.data.auth_token,
@@ -252,6 +281,10 @@ onSignIn(email,password){
 
 onRegister(email,password){
 
+  this.setState({
+    loading : true,
+    loadingText :'Registering'
+  })
 
   var options = {
     url : `https://auth.calk49.hasura-app.io/v1/signup`,
@@ -271,13 +304,17 @@ onRegister(email,password){
 
   socket.emit('proxyrq', options , (d)=>{
 
+    this.setState({
+      loading : false,
+      loadingText :null
+    })
    
    if(d.error)
     {
       alert(JSON.stringify(d.error.message))
     }
     else {
-      console.log('Email confirmination message has been sent to your email address.')
+      alert('Email confirmination message has been sent to your email address. It could be in the spam folder.')
     }
 
 
@@ -287,6 +324,11 @@ onRegister(email,password){
 }
 
 onAdditionalInfoFilled(data){
+
+  this.setState({
+    loading : true,
+    loadingText :'Saving your info'
+  })
 
   alert(JSON.stringify(data))
   socket.emit('querydata',{
@@ -311,17 +353,18 @@ onAdditionalInfoFilled(data){
     }
 },(a)=>{
 
-  if(a.status == 'ok' && a.data.length > 0){
+  this.setState({
+    loading : false,
+    loadingText :null
+  })
+
+  if(a.status == 'ok' ){
 
     this.checkForAdditionalInfo();
 
   }
   else{
-    this.setState({
-      additional_info_filled : false
-    })
-
-    localStorage.additional_info_filled = false
+    alert(JSON.stringify(a))
   }
 });
 
@@ -361,30 +404,30 @@ runResult(output,stderr,error){
 
   
   render(props) {
+
+    if(this.state.loading)
+     return <Loading open= {true} text = {this.state.loadingText}/>;
+
+    if(!localStorage.hasura_token)
+    {
+      return   <Login
+      open = {true}
+     onRegister={(email,pwd)=>this.onRegister(email,pwd)} 
+     onLogin = {(email,pwd)=>this.onSignIn(email,pwd)}
+      /> 
+
+    } else if (!localStorage.additional_info_filled)
+    {
+      return   <AdditionalInfo
+      open = {true}
+      onFilled = {(d)=>{
+        this.onAdditionalInfoFilled(d)
+      }}
+      />
+    }
+    else 
     return (
       <div>
-
-
-      {
-
-      !localStorage.getItem('hasura_token')?
-      
-       <Login
-        open = {true}
-       onRegister={(email,pwd)=>this.onRegister(email,pwd)} 
-       onLogin = {(email,pwd)=>this.onSignIn(email,pwd)}
-        /> :
-
-        !localStorage.additional_info_filled ? 
-        
-        <AdditionalInfo
-        open = {true}
-        onFilled = {(d)=>{
-          this.onAdditionalInfoFilled(d)
-        }}
-        />
-
-        : 
 
       <div >
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -515,7 +558,7 @@ runResult(output,stderr,error){
      Shivam Kumar Dwivedi <a href="https://github.com/shivamd20">Fork me on github</a>
         </footer>
       </div>
-      }
+     
       </div>
     );
   }

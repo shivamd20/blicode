@@ -134,7 +134,13 @@ class Login extends React.Component {
       label="email"
 
       value={this.state.email}
-      onChange={this.handleChange('email')}
+      onChange={(e)=>{
+        this.setState({
+          email : e.target.value.toLowerCase()
+        })
+      }}
+
+    
       margin="normal"
     />
 
@@ -142,12 +148,14 @@ class Login extends React.Component {
 
     <TextField
       label="password"
+      type = "password"
       error={this.state.passwordError}
       value={this.state.password}
       onChange={this.handleChange('password')}
       margin="normal"
     />
    { this.state.alreadyRegistered ? "": <TextField
+     type = "password"
       label="Confirm Password"
       error={this.state.cnfPasswordErro}
       value={this.state.cnfPassword}
