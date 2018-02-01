@@ -181,7 +181,7 @@ class Login extends React.Component {
             alert('Passwords do not match');
             return;
           }
-          else if (this.state.password.length <8){
+          else if (!this.state.password || this.state.password.length <8){
 
             alert("password is too short");
             return;

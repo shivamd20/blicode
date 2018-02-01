@@ -1,8 +1,9 @@
 .ProblemArea{
     width: 90vw;
     padding: 4px;
-    color: white;
+   
     font-size: medium;
-    background-color:'darkgray'
+    color: 'black';
+    background-color:'#DCDCDC'
     
 }

@@ -25,9 +25,11 @@ class RunResultArea extends React.Component{
 
         
         
-        <div>{this.props.stdout}</div>
-        <div>{this.props.stderr}</div>
-        <div>{this.props.error}</div>
+       { this.props.stdout &&  <div  style={{color : 'blue'}}> <h3>Output: </h3>{this.props.stdout}</div> }
+       { this.props.stderr &&  <div  style={{color : 'red'}}> <h3>stderr</h3>{this.props.stderr}</div> }
+       { this.props.error &&  <div  style={{color : 'red'}}> <h3>error</h3>{this.props.error}</div> }
+
+    
         
         </div>;
     }

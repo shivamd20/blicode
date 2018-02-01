@@ -40,11 +40,10 @@ const styles = theme => ({
 
 
 var State={
-  secretKey:'secretKey',
+
   email:'email',
-  token:null,
+
   name:'name',
-  gameId:'gameId',
   result:0,
   code: `
   public class Ramu{
@@ -55,40 +54,22 @@ var State={
         sc.close();
             }
      }`,
-  sampleIp:'sampleIp',
-  Sampleop:'Sampleop',
   fileName:'fileName',
-  clockTime:1800,
+  clockTime:0,
   duration:5000,
-  problemStmt:'problem stament',
   input: '1 2',
-  stdout:'stdout',
-  stderr:'stderr',
-  error:'error',
   fileName: 'Ramu.java',
-  loading:false,
+
   language: 'java',
   version: 'latest',
   glotToken:'c5746811-352e-439e-82c8-4ca9dadb0eea',
-  running:false,
+
   hasura_id:0,
   additional_info_filled : localStorage.additional_info_filled,
-  college :null,
-branch:null,
-email:null,
-mobile:null,
-name:null,
-semester:null,
-loading: false,
-loadingText: null
+ 
 }
   
 class App extends Component {
-
-
-
-
- 
 
 state={
 
@@ -164,6 +145,117 @@ state={
 
 }
 
+checkSecretKey(key){
+
+ var t= {
+  "type": "select",
+  "args": {
+      "table": "game_set",
+      "columns": [
+          "*",
+          {
+              "name": "game_set-problem",
+              "columns": [
+                  "*"
+              ]
+          }
+      ],
+      "where": {
+          "game_id": {
+              "$eq": key || this.state.secretKey
+          }
+      },
+      "limit": "1"
+  }
+}
+
+this.setState({
+  loading : true,
+  loadingText :'Checking your secret key'
+})
+
+socket.emit('querydata',t,(a)=>{
+
+
+//alert(JSON.stringify(a))
+
+this.setState({
+  loading : false,
+  loadingText :null
+})
+
+if(a.error){
+  alert('There is some error. Please refresh this page');
+  return
+}
+else if(a.data.length === 0){
+
+  alert('invalid secret key');
+  window.location.reload();
+
+  this.setState({
+    secretKey : null
+  })
+  
+}else {
+
+  this.setState({
+
+    sampleIp : a.data[0]['game_set-problem'].sameIp,
+    problemId : a.data[0]['game_set-problem'].problem_id,
+    sampleOp : a.data[0]['game_set-problem'].sampleop,
+    problemDescp : a.data[0]['game_set-problem'].description,
+    game_about : a.data[0].about,
+    duration : a.data[0].duration
+
+  })
+  this.startGame();
+}
+
+
+});
+
+
+}
+
+
+startGame(){
+
+
+  this.setState({
+    loading : true,
+    loadingText :'Setting up'
+  })
+
+  socket.emit('querydata',{
+    "type": "select",
+    "args": {
+        "table": "user",
+        "columns": [
+            "*"
+        ],
+        "where": {
+            "user_id": {
+                "$eq": localStorage.hasura_id
+            }
+        }
+    }
+},(a)=>{
+
+
+  this.startTimer();
+
+  this.setState({
+    loading : false,
+    loadingText :null
+  })
+
+ // alert(JSON.stringify(a))
+
+});
+  
+}
+
 checkForAdditionalInfo(){
 
   this.setState({
@@ -191,7 +283,7 @@ checkForAdditionalInfo(){
     loadingText :null
   })
 
-  alert(JSON.stringify(a))
+//  alert(JSON.stringify(a))
 
   if(a.status == 'ok' && a.data.length === 1){
 
@@ -248,9 +340,10 @@ onSignIn(email,password){
    if(d.error)
     {
       alert(JSON.stringify(d.error.message))
+      window.location.reload();
     }
     else if (d.data) {
-      alert('Login Successfull')
+  //    alert('Login Successfull')
       console.log(d.data)
 
 
@@ -266,13 +359,14 @@ onSignIn(email,password){
         token :d.data.auth_token,
         email : d.data.email,
         hasura_id : d.data.hasura_id
-      })
+      }, this.checkForAdditionalInfo())
 
-      this.checkForAdditionalInfo();
+     
     }
-    else
+    else{
     alert('unexpected error');
-
+    window.location.reload();
+    }
 
   });
 
@@ -315,6 +409,7 @@ onRegister(email,password){
     }
     else {
       alert('Email confirmination message has been sent to your email address. It could be in the spam folder.')
+      window.location.reload();
     }
 
 
@@ -330,7 +425,7 @@ onAdditionalInfoFilled(data){
     loadingText :'Saving your info'
   })
 
-  alert(JSON.stringify(data))
+ // alert(JSON.stringify(data))
   socket.emit('querydata',{
     "type": "insert",
     "args": {
@@ -365,37 +460,49 @@ onAdditionalInfoFilled(data){
   }
   else{
     alert(JSON.stringify(a))
+    window.location.reload();
   }
 });
 
 }
 
 startTimer(){
+
+  this.setState(()=>{
+
+    return {
+      duration : this.state.clockTime
+    }
+  })
+
   setInterval(()=>{
 
     if(this.state.clockTime>= this.state.duration)
     {
       this.onCompleted();
-    }
+    }else{
 
     this.setState({
       clockTime:this.state.clockTime-1
-    })
+    })}
   },1000);
 }
 
 constructor(){
   super();
 
-  socket.on('connect', function(){
+
+
+  socket.on('connect', ()=>{
 
     console.log(localStorage.getItem("hasura_token"))
 
     socket.emit('settoken' , localStorage.getItem("hasura_token"), (d)=>{console.log(d)});
 
+    this.checkForAdditionalInfo();
+
   });
 
-  this.startTimer();
 }
 
 runResult(output,stderr,error){
@@ -425,7 +532,17 @@ runResult(output,stderr,error){
       }}
       />
     }
-    else 
+    else if(!this.state.secretKey){
+      var secretKey = prompt('Please enter the secret key');
+      this.setState({
+        secretKey : secretKey
+      })
+
+      this.checkSecretKey(secretKey);
+    }
+
+
+
     return (
       <div>
 
@@ -448,16 +565,16 @@ runResult(output,stderr,error){
         }}>Problem</h1></Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails style={{
-          color: 'white',
-          backgroundColor:'gray'
+          color: 'black',
+          backgroundColor:'#DCDCDC'
         }}>
           <Typography style={{
-          color: 'white',
-          backgroundColor:'gray'
+          color: 'black',
+          backgroundColor:'#DCDCDC'
         }}>
 
           <ProblemArea
-           problem = {this.state.problemStmt} 
+           problem = {this.state.problemDescp} 
            sampleIp = {this.state.sampleIp} 
            sampleOp = {this.state.sampleOp}
            />
@@ -489,9 +606,7 @@ runResult(output,stderr,error){
           input={this.state.input}
           language={this.state.language}
           fileName={this.state.fileName}
-          isCompiling={this.state.isSubmitting}
-          onRun={()=>{alert('ramesh')}}
-          runResult={this.runResult}
+  
 
           onLanguageChange={(value)=>{
             this.setState(
@@ -533,8 +648,8 @@ runResult(output,stderr,error){
         <h2 style={{fontSize:'large'}}>Compile and Run</h2> 
         </ExpansionPanelSummary>
         <ExpansionPanelDetails style={{
-          color: 'white',
-          backgroundColor:'gray'
+          color: 'black',
+          backgroundColor:'#DCDCDC'
         }}>
         <Typography>
         

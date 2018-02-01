@@ -127,6 +127,7 @@ class MenuAppBar extends React.Component {
                   <MenuItem onClick={()=>{
 
                     localStorage.clear();
+                    window.location.reload();
 
                   }}>Logout</MenuItem>
                 </Menu>
