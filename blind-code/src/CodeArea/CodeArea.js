@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import  './CodeArea.css';
-import AceEditor from 'react-ace';
-import 'brace/ext/language_tools';
-import 'brace/ext/searchbox';
+// import AceEditor from 'react-ace';
+// import 'brace/ext/language_tools';
+// import 'brace/ext/searchbox';
 import SettingBar from './SettingBar';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
@@ -103,15 +103,15 @@ var glotlanguages = [
   ]
   
   
-  languages.forEach((lang) => {
-    require(`brace/mode/${lang}`)
-    require(`brace/snippets/${lang}`)
-  })
+  // languages.forEach((lang) => {
+  //   require(`brace/mode/${lang}`)
+  //   require(`brace/snippets/${lang}`)
+  // })
   
   
-  themes.forEach((theme) => {
-    require(`brace/theme/${theme}`)
-  })
+  // themes.forEach((theme) => {
+  //   require(`brace/theme/${theme}`)
+  // })
 class CodeArea extends Component {
 
   changeEditorLanguage(language) {
@@ -315,47 +315,47 @@ class CodeArea extends Component {
 
     render(){
 
-      const editor =  <AceEditor
-      style={{
-          width:'95vw',
-          filter: this.state.editorFilter
-      }}
-      mode={this.state.mode}
-      theme={this.state.theme}
-      name="UNIQUE_ID_OF_DIV"
-      editorProps={{ $blockScrolling: true }}
-      enableBasicAutocompletion={this.state.enableBasicAutocompletion}
-      enableLiveAutocompletion={this.state.enableLiveAutocompletion}
-      showSettingsMenu={true}
-      mode={this.state.mode}
-      theme={this.state.theme}
-      name="blah2"
-      onLoad={this.onLoad}
+    //   const editor =  <AceEditor
+    //   style={{
+    //       width:'95vw',
+    //       filter: this.state.editorFilter
+    //   }}
+    //   mode={this.state.mode}
+    //   theme={this.state.theme}
+    //   name="UNIQUE_ID_OF_DIV"
+    //   editorProps={{ $blockScrolling: true }}
+    //   enableBasicAutocompletion={this.state.enableBasicAutocompletion}
+    //   enableLiveAutocompletion={this.state.enableLiveAutocompletion}
+    //   showSettingsMenu={true}
+    //   mode={this.state.mode}
+    //   theme={this.state.theme}
+    //   name="blah2"
+    //   onLoad={this.onLoad}
   
-      // onChange={(value) => {
-      //   this.state.code = value;
+    //   // onChange={(value) => {
+    //   //   this.state.code = value;
   
-      //   console.log("value changed");
+    //   //   console.log("value changed");
   
-      //   //alert(this.state.body);
+    //   //   //alert(this.state.body);
   
-      // }}
+    //   // }}
   
-      onChange={this.props.onCodeChange}
+    //   onChange={this.props.onCodeChange}
   
-      fontSize={this.state.fontSize}
-      showPrintMargin={this.state.showPrintMargin}
-      showGutter={this.state.showGutter}
-      highlightActiveLine={this.state.highlightActiveLine}
-      value={this.props.code}
-      setOptions={{
-        enableBasicAutocompletion: this.state.enableBasicAutocompletion,
-        enableLiveAutocompletion: this.state.enableLiveAutocompletion,
-        enableSnippets: this.state.enableSnippets,
-        showLineNumbers: this.state.showLineNumbers,
-        tabSize: 2,
-      }}
-    />
+    //   fontSize={this.state.fontSize}
+    //   showPrintMargin={this.state.showPrintMargin}
+    //   showGutter={this.state.showGutter}
+    //   highlightActiveLine={this.state.highlightActiveLine}
+    //   value={this.props.code}
+    //   setOptions={{
+    //     enableBasicAutocompletion: this.state.enableBasicAutocompletion,
+    //     enableLiveAutocompletion: this.state.enableLiveAutocompletion,
+    //     enableSnippets: this.state.enableSnippets,
+    //     showLineNumbers: this.state.showLineNumbers,
+    //     tabSize: 2,
+    //   }}
+    // />
 
 
 
@@ -378,18 +378,6 @@ theme={this.state.theme}
  }} 
 
 
- onFontChange={(value)=>{
- this.setState({
-   fontSize:value.target.value
- })
-
- }}
-onThemeChange={(value)=>{
-  alert(JSON.stringify(editor.editor));
-  this.setState({
-   theme:value.target.value
- })
-}}
 
 />
 
