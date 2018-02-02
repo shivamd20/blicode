@@ -17,7 +17,7 @@ class RunResultArea extends React.Component{
             //lang,input,filename,version,code
               this.props.onRun();
           }}> run
-           {(this.props.error||this.props.stderr||this.props.stdout) &&  <CheckIcon  />  }
+           {(this.props.running && this.props.error||this.props.stderr||this.props.stdout) &&  <CheckIcon  />  }
 
           {this.props.running && <CircularProgress size={20} />}
           </Button>
