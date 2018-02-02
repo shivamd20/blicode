@@ -7,6 +7,8 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Switch from 'material-ui/Switch';
 import { FormControlLabel, FormGroup } from 'material-ui/Form';
+import { withRouter } from 'react-router-dom'
+import Loading from './Loading'
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -23,8 +25,7 @@ function getModalStyle() {
   };
 }
 
-
-
+var socket;
 
 const styles = theme => ({
   paper: {
@@ -49,33 +50,122 @@ class Login extends React.Component {
     alreadyRegistered: false
   };
 
+  constructor(){
+    super();
+
+    socket = window.socket;
+  }
+
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value,
     });
   };
 
-  
 
-  // handleChange(val){
 
-  //   switch(val){
+onSignIn(email,password){
 
-  //     case 'email': 
+  this.setState({
+    loading : true,
+    loadingText :'Signing in'
+  })
 
-  //     this.setState({
-  //       email : val
-  //     })
+  var options = {
+    url : `https://auth.calk49.hasura-app.io/v1/login`,
+    method : 'post',
+    headers : {
+      'Content-type': 'application/json'
+    },
+    data: {
+      "provider" : "email",
+      "data" : {
+         "email": email,
+         "password": password
+      }
+    },
 
-  //     break;
-  //     case 'pwd': break;
-  //     case 'cnfpwd': break;
-  //     case 'signin': break;
-  //     case 'register': break;
-  //     case  'alreadyRegistered' : break;
+  }
 
-  //   }
+  socket.emit('proxyrq', options , (d)=>{
 
+    this.setState({
+      loading : false,
+      loadingText :null
+    })
+
+   
+   if(d.error)
+    {
+      alert(JSON.stringify(d.error.message))
+    }
+    else if (d.data) {
+     alert('Login Successfull')
+      console.log(d.data)
+
+      localStorage.email = email
+      localStorage.hasura_token="Bearer "+d.data.auth_token;
+      localStorage.hasura_id = d.data.hasura_id;
+      
+      socket.emit('settoken' , localStorage.hasura_token, (d)=>{console.log(d)});
+
+      this.props.history.push('/info');
+     
+      
+    }
+    else{
+    alert('unexpected error');
+    }
+
+  });
+
+
+}
+
+onRegister(email,password){
+
+  this.setState({
+    loading : true,
+    loadingText :'Registering'
+  })
+
+  var options = {
+    url : `https://auth.calk49.hasura-app.io/v1/signup`,
+    method : 'post',
+    headers : {
+      'Content-type': 'application/json'
+    },
+    data: {
+      "provider" : "email",
+      "data" : {
+         "email": email,
+         "password": password
+      }
+    },
+
+  }
+
+  socket.emit('proxyrq', options , (d)=>{
+
+    this.setState({
+      loading : false,
+      loadingText :null
+    })
+   
+   if(d.error)
+    {
+      alert(JSON.stringify(d.error.message))
+    }
+    else {
+      alert('Email confirmination message has been sent to your email address. It could be in the spam folder.')
+      this.setState({
+        alreadyRegistered : true
+      })
+    }
+  });
+
+
+}
 
 
   handleOpen = () => {
@@ -89,12 +179,16 @@ class Login extends React.Component {
   render() {
     const { classes } = this.props;
 
+
+     if(this.state.loading)
+      return <Loading open= {true} text = {this.state.loadingText}/>;
+
     return (
       <div>
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
-          open={this.props.open}
+          open={true || this.props.open}
           onClose={this.handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
@@ -174,7 +268,7 @@ class Login extends React.Component {
 
         if(this.state.alreadyRegistered)
         {
-          this.props.onLogin(this.state.email,this.state.password)
+          this.onSignIn(this.state.email,this.state.password)
         }else{
 
           if(this.state.password !== this.state.cnfPassword){
@@ -188,7 +282,7 @@ class Login extends React.Component {
 
           }
 
-          this.props.onRegister(this.state.email,this.state.password);
+          this.onRegister(this.state.email,this.state.password);
         }
       }
     }
@@ -215,4 +309,4 @@ Login.propTypes = {
 // We need an intermediary variable for handling the recursive nesting.
 const wLogin = withStyles(styles)(Login);
 
-export default wLogin;
+export default withRouter(wLogin);

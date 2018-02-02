@@ -23,7 +23,7 @@ import Loading from './Loading';
 import io from 'socket.io-client';
 import { dark } from 'material-ui/styles/createPalette';
 
-const socket = io('https://api.calk49.hasura-app.io');
+var socket ;
 
 
 const styles = theme => ({
@@ -129,21 +129,9 @@ state={
   });
 
 };
- onSubmit(){
-
-};
 
 
- onExit(){
 
-};
- onLanguageChange(){
-
-};
-
- onCompleted(){
-
-}
 
 checkSecretKey(key){
 
@@ -212,10 +200,7 @@ else if(a.data.length === 0){
   this.startGame();
 }
 
-
 });
-
-
 }
 
 
@@ -370,7 +355,6 @@ onSignIn(email,password){
 
   });
 
-
 }
 
 onRegister(email,password){
@@ -411,58 +395,8 @@ onRegister(email,password){
       alert('Email confirmination message has been sent to your email address. It could be in the spam folder.')
       window.location.reload();
     }
-
-
   });
 
-
-}
-
-onAdditionalInfoFilled(data){
-
-  this.setState({
-    loading : true,
-    loadingText :'Saving your info'
-  })
-
- // alert(JSON.stringify(data))
-  socket.emit('querydata',{
-    "type": "insert",
-    "args": {
-        "table": "user",
-        "objects": [
-            {
-                "user_id": data.user_id,
-                "email": data.email,
-                "name": data.name,
-                "College": data.College,
-                "mobile": data.mobile,
-                "branch": data.branch,
-                "semester": data.semester,
-            }
-        ],
-        "returning": [
-            "user_id"
-        ],
-        " on_conflict ":'update'
-    }
-},(a)=>{
-
-  this.setState({
-    loading : false,
-    loadingText :null
-  })
-
-  if(a.status == 'ok' ){
-
-    this.checkForAdditionalInfo();
-
-  }
-  else{
-    alert(JSON.stringify(a))
-    window.location.reload();
-  }
-});
 
 }
 
@@ -477,31 +411,19 @@ startTimer(){
 
   setInterval(()=>{
 
-    if(this.state.clockTime>= this.state.duration)
-    {
-      this.onCompleted();
-    }else{
-
     this.setState({
       clockTime:this.state.clockTime-1
     })}
-  },1000);
+  ,1000);
 }
 
 constructor(){
   super();
 
 
+  socket = window.socket;
 
-  socket.on('connect', ()=>{
-
-    console.log(localStorage.getItem("hasura_token"))
-
-    socket.emit('settoken' , localStorage.getItem("hasura_token"), (d)=>{console.log(d)});
-
-    this.checkForAdditionalInfo();
-
-  });
+  this.checkForAdditionalInfo();
 
 }
 
@@ -511,37 +433,6 @@ runResult(output,stderr,error){
 
   
   render(props) {
-
-    if(this.state.loading)
-     return <Loading open= {true} text = {this.state.loadingText}/>;
-
-    if(!localStorage.hasura_token)
-    {
-      return   <Login
-      open = {true}
-     onRegister={(email,pwd)=>this.onRegister(email,pwd)} 
-     onLogin = {(email,pwd)=>this.onSignIn(email,pwd)}
-      /> 
-
-    } else if (!localStorage.additional_info_filled)
-    {
-      return   <AdditionalInfo
-      open = {true}
-      onFilled = {(d)=>{
-        this.onAdditionalInfoFilled(d)
-      }}
-      />
-    }
-    else if(!this.state.secretKey){
-      var secretKey = prompt('Please enter the secret key');
-      this.setState({
-        secretKey : secretKey
-      })
-
-      this.checkSecretKey(secretKey);
-    }
-
-
 
     return (
       <div>

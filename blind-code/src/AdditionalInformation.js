@@ -7,7 +7,9 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Switch from 'material-ui/Switch';
 import { FormControlLabel, FormGroup } from 'material-ui/Form';
+import Loading from './Loading'
 
+var socket;
 
 function getModalStyle() {
     const top = 50;
@@ -32,6 +34,11 @@ const styles = theme => ({
 
 class AdditionalInfo extends React.Component {
 
+    constructor(){
+        super();
+        socket = window.socket;
+      }
+
     state = {
         name: null,
         College: null,
@@ -41,6 +48,60 @@ class AdditionalInfo extends React.Component {
         email : localStorage.email,
         user_id : localStorage.hasura_id
     };
+
+
+onAdditionalInfoFilled(){
+
+    const data = this.state;
+
+    this.setState({
+      loading : true,
+      loadingText :'Saving your info'
+    })
+  
+   // alert(JSON.stringify(data))
+    socket.emit('querydata',{
+      "type": "insert",
+      "args": {
+          "table": "user",
+          "objects": [
+              {
+                  "user_id": data.user_id,
+                  "email": data.email,
+                  "name": data.name,
+                  "College": data.College,
+                  "mobile": data.mobile,
+                  "branch": data.branch,
+                  "semester": data.semester,
+              }
+          ],
+          "returning": [
+              "user_id"
+          ],
+          " on_conflict ":'update'
+      }
+  },(a)=>{
+  
+    this.setState({
+      loading : false,
+      loadingText :null
+    })
+  
+    if(a.status == 'ok' ){
+  
+    //  this.checkForAdditionalInfo();
+
+    alert('info successfully saved')
+  
+    }
+    else{
+      alert(JSON.stringify(a))
+      window.location.reload();
+    }
+  });
+  
+  }
+  
 
     handleOpen = () => {
         this.setState({ open: true });
@@ -59,12 +120,16 @@ class AdditionalInfo extends React.Component {
     render() {
         const { classes } = this.props;
 
+
+     if(this.state.loading)
+     return <Loading open= {true} text = {this.state.loadingText}/>;
+
         return (
             <center>
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
-                    open={this.props.open}
+                    open={true || this.props.open}
                     onClose={this.handleClose}
                 >
                     <div style={getModalStyle()} className={classes.paper}>
@@ -145,7 +210,7 @@ class AdditionalInfo extends React.Component {
                                 if(this.state.branch && this.state.name && 
                                 this.state.mobile && this.state.College 
                                 && this.state.semester)
-                                this.props.onFilled(this.state)
+                                this.onAdditionalInfoFilled()
                                 else {
                                     alert('Incomplete Informaiton')
                                 }}}
