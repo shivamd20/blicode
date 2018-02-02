@@ -39,6 +39,61 @@ class AdditionalInfo extends React.Component {
         socket = window.socket;
       }
 
+
+checkForAdditionalInfo(){
+
+    this.setState({
+      loading : true,
+      loadingText :'Check your information'
+    })
+  
+    socket.emit('querydata',{
+      "type": "select",
+      "args": {
+          "table": "user",
+          "columns": [
+              "*"
+          ],
+          "where": {
+              "user_id": {
+                  "$eq": localStorage.hasura_id
+              }
+          }
+      }
+  },(a)=>{
+  
+    this.setState({
+      loading : false,
+      loadingText :null
+    })
+  
+  //  alert(JSON.stringify(a))
+  
+    if(a.status == 'ok' && a.data.length === 1){
+
+        localStorage.info = JSON.stringify( {
+            college :a.data[0].college,
+            branch:a.data[0].branch,
+            email:a.data[0].email,
+            mobile:a.data[0].mobile,
+            name:a.data[0].name,
+            semester:a.data[0].semester,
+            additional_info_filled : true
+                })
+  
+      this.setState()
+  
+      localStorage.additional_info_filled = true;
+
+      this.props.history.push('/code');
+    }
+    else 
+    {
+  
+    }
+  });
+  }
+
     state = {
         name: null,
         College: null,
@@ -49,6 +104,10 @@ class AdditionalInfo extends React.Component {
         user_id : localStorage.hasura_id
     };
 
+
+    componentWillMount(){
+        this.checkForAdditionalInfo();
+    }
 
 onAdditionalInfoFilled(){
 

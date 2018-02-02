@@ -17,11 +17,11 @@ import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import lightBlue from 'material-ui/colors/lightBlue';
 import Login from './SignIn';
 import AdditionalInfo from './AdditionalInformation';
-
 import Loading from './Loading';
-
+import { withRouter } from 'react-router-dom'
 import io from 'socket.io-client';
 import { dark } from 'material-ui/styles/createPalette';
+import AskForSecretKey from './AskForSecretKey';
 
 var socket ;
 
@@ -62,7 +62,6 @@ var State={
   glotToken:'c5746811-352e-439e-82c8-4ca9dadb0eea',
 
   hasura_id:0,
-  additional_info_filled : localStorage.additional_info_filled,
  
 }
   
@@ -125,79 +124,6 @@ state={
 };
 
 
-
-
-checkSecretKey(key){
-
- var t= {
-  "type": "select",
-  "args": {
-      "table": "game_set",
-      "columns": [
-          "*",
-          {
-              "name": "game_set-problem",
-              "columns": [
-                  "*"
-              ]
-          }
-      ],
-      "where": {
-          "game_id": {
-              "$eq": key || this.state.secretKey
-          }
-      },
-      "limit": "1"
-  }
-}
-
-this.setState({
-  loading : true,
-  loadingText :'Checking your secret key'
-})
-
-socket.emit('querydata',t,(a)=>{
-
-
-//alert(JSON.stringify(a))
-
-this.setState({
-  loading : false,
-  loadingText :null
-})
-
-if(a.error){
-  alert('There is some error. Please refresh this page');
-  return
-}
-else if(a.data.length === 0){
-
-  alert('invalid secret key');
-  window.location.reload();
-
-  this.setState({
-    secretKey : null
-  })
-  
-}else {
-
-  this.setState({
-
-    sampleIp : a.data[0]['game_set-problem'].sameIp,
-    problemId : a.data[0]['game_set-problem'].problem_id,
-    sampleOp : a.data[0]['game_set-problem'].sampleop,
-    problemDescp : a.data[0]['game_set-problem'].description,
-    game_about : a.data[0].about,
-    duration : a.data[0].duration
-
-  })
-  this.startGame();
-}
-
-});
-}
-
-
 startGame(){
 
 
@@ -235,55 +161,6 @@ startGame(){
   
 }
 
-checkForAdditionalInfo(){
-
-  this.setState({
-    loading : true,
-    loadingText :'Check your information'
-  })
-
-  socket.emit('querydata',{
-    "type": "select",
-    "args": {
-        "table": "user",
-        "columns": [
-            "*"
-        ],
-        "where": {
-            "user_id": {
-                "$eq": localStorage.hasura_id
-            }
-        }
-    }
-},(a)=>{
-
-  this.setState({
-    loading : false,
-    loadingText :null
-  })
-
-//  alert(JSON.stringify(a))
-
-  if(a.status == 'ok' && a.data.length === 1){
-
-    this.setState({
-college :a.data[0].college,
-branch:a.data[0].branch,
-email:a.data[0].email,
-mobile:a.data[0].mobile,
-name:a.data[0].name,
-semester:a.data[0].semester,
-additional_info_filled : true
-    })
-
-    localStorage.additional_info_filled = true;
-  }
-  else 
-  {
-
-  }
-});
-}
 
 onSignIn(email,password){
 
@@ -394,6 +271,30 @@ onRegister(email,password){
 
 }
 
+componentWillMount(){
+  
+  if(!localStorage.hasura_id){
+    this.props.history.push('/login');
+  }else if (!localStorage.info){
+    this.props.history.push('/info');
+  }else {
+
+    let info = JSON.parse(localStorage.info);
+
+    this.setState( {
+      college :info.college,
+      branch:info.branch,
+      email:info.email,
+      mobile:info.mobile,
+      name:info.name,
+      semester:info.semester,
+          }
+        )
+
+        alert(JSON.stringify(info))
+  }
+}
+
 startTimer(){
 
   this.setState(()=>{
@@ -411,21 +312,29 @@ startTimer(){
   ,1000);
 }
 
-constructor(){
+constructor(props){
   super();
 
   socket = window.socket;
+
+
 
   // this.checkForAdditionalInfo();
 
 }
 
-runResult(output,stderr,error){
-  alert(output+stderr+error);
-}
-
-  
   render(props) {
+
+    if(!this.state.problem){
+    return  <AskForSecretKey
+      onQueLoaded = {(e)=>{
+
+         this.setState({
+           problem : e
+         })
+      }}
+      />
+    }
 
     return (
       <div>
@@ -458,9 +367,9 @@ runResult(output,stderr,error){
         }}>
 
           <ProblemArea
-           problem = {this.state.problemDescp} 
-           sampleIp = {this.state.sampleIp} 
-           sampleOp = {this.state.sampleOp}
+           problem = {this.state.problem.problemDescp} 
+           sampleIp = {this.state.problem.sampleIp} 
+           sampleOp = {this.state.problem.sampleOp}
            />
 
           </Typography>
@@ -563,4 +472,4 @@ runResult(output,stderr,error){
   }
 }
 
-export default App;
+export default withRouter(App);

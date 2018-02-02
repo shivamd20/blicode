@@ -40,14 +40,7 @@ const styles = theme => ({
 
 class Login extends React.Component {
   state = {
-    open: false,
-    email: null,
-    password: null,
-    cnfPassword: null,
-    emailError: null,
-    passwordError: null,
-    cnfPasswordErro: null,
-    alreadyRegistered: false
+  
   };
 
   constructor(){
