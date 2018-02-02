@@ -36,9 +36,6 @@ const styles = theme => ({
   },
 });
 
-
-
-
 var State={
 
   email:'email',
@@ -122,10 +119,7 @@ state={
       })
 
     }
-
     console.log(d);
-
-
   });
 
 };
@@ -420,10 +414,9 @@ startTimer(){
 constructor(){
   super();
 
-
   socket = window.socket;
 
-  this.checkForAdditionalInfo();
+  // this.checkForAdditionalInfo();
 
 }
 

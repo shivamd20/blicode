@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Link
 } from 'react-router-dom'
@@ -88,7 +88,7 @@ class NewApp extends React.Component{
 
       <hr/> */}
 
-      <Route exact path="/" component={App}/>
+      <Route exact path="/code" component={App}/>
       <Route path="/login" component={Login}/>
       <Route path="/info" component={Info}/>
     </div>
