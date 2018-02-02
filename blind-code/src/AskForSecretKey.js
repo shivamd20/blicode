@@ -103,7 +103,8 @@ class AskForSecretKey extends React.Component {
        sampleOp : a.data[0]['game_set-problem'].sampleop,
        problemDescp : a.data[0]['game_set-problem'].description,
        game_about : a.data[0].about,
-       duration : a.data[0].duration
+       duration : a.data[0].duration,
+       secretKey : this.state.secretKey
      };
      this.props.onQueLoaded(b)
    }

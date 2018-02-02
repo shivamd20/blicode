@@ -133,17 +133,18 @@ startGame(){
   })
 
   socket.emit('querydata',{
-    "type": "select",
+    "type": "insert",
     "args": {
-        "table": "user",
-        "columns": [
-            "*"
-        ],
-        "where": {
-            "user_id": {
-                "$eq": localStorage.hasura_id
+        "table": "game",
+        "objects": [
+            {
+                "userId": localStorage.userId,
+                "game_key": this.state.problem.secretKey
             }
-        }
+        ],
+        "returning": [
+            "gameid"
+        ]
     }
 },(a)=>{
 
@@ -155,121 +156,13 @@ startGame(){
     loadingText :null
   })
 
- // alert(JSON.stringify(a))
+  alert(JSON.stringify(a))
 
 });
   
 }
 
 
-onSignIn(email,password){
-
-  this.setState({
-    loading : true,
-    loadingText :'Signing in'
-  })
-
-  var options = {
-    url : `https://auth.calk49.hasura-app.io/v1/login`,
-    method : 'post',
-    headers : {
-      'Content-type': 'application/json'
-    },
-    data: {
-      "provider" : "email",
-      "data" : {
-         "email": email,
-         "password": password
-      }
-    },
-
-  }
-
-  socket.emit('proxyrq', options , (d)=>{
-
-    this.setState({
-      loading : false,
-      loadingText :null
-    })
-
-   
-   if(d.error)
-    {
-      alert(JSON.stringify(d.error.message))
-      window.location.reload();
-    }
-    else if (d.data) {
-  //    alert('Login Successfull')
-      console.log(d.data)
-
-
-
-      localStorage.email = email
-      localStorage.hasura_token="Bearer "+d.data.auth_token;
-      localStorage.hasura_id = d.data.hasura_id;
-
-
-      socket.emit('settoken' , localStorage.hasura_token, (d)=>{console.log(d)});
-
-      this.setState({
-        token :d.data.auth_token,
-        email : d.data.email,
-        hasura_id : d.data.hasura_id
-      }, this.checkForAdditionalInfo())
-
-     
-    }
-    else{
-    alert('unexpected error');
-    window.location.reload();
-    }
-
-  });
-
-}
-
-onRegister(email,password){
-
-  this.setState({
-    loading : true,
-    loadingText :'Registering'
-  })
-
-  var options = {
-    url : `https://auth.calk49.hasura-app.io/v1/signup`,
-    method : 'post',
-    headers : {
-      'Content-type': 'application/json'
-    },
-    data: {
-      "provider" : "email",
-      "data" : {
-         "email": email,
-         "password": password
-      }
-    },
-
-  }
-
-  socket.emit('proxyrq', options , (d)=>{
-
-    this.setState({
-      loading : false,
-      loadingText :null
-    })
-   
-   if(d.error)
-    {
-      alert(JSON.stringify(d.error.message))
-    }
-    else {
-      alert('Email confirmination message has been sent to your email address. It could be in the spam folder.')
-      window.location.reload();
-    }
-  });
-
-
-}
 
 componentWillMount(){
   

@@ -81,15 +81,14 @@ checkForAdditionalInfo(){
             additional_info_filled : true
                 })
   
-      this.setState()
-  
       localStorage.additional_info_filled = true;
 
       this.props.history.push('/code');
     }
     else 
     {
-  
+        alert('unexpected error');
+        window.location.reload();
     }
   });
   }
@@ -148,13 +147,13 @@ onAdditionalInfoFilled(){
   
     if(a.status == 'ok' ){
   
-    //  this.checkForAdditionalInfo();
+      this.checkForAdditionalInfo();
 
-    alert('info successfully saved')
+ //   alert('info successfully saved')
   
     }
-    else{
-      alert(JSON.stringify(a))
+    else if (a.error.code === "postgres-error"){
+      alert('data already inserted')
       window.location.reload();
     }
   });

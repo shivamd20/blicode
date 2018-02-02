@@ -408,6 +408,14 @@ toggle blur
       onChange={this.props.onCodeChange}
 
       value = {this.props.code}
+
+      onKeyDown = {(e)=>{
+        if(e.keyCode==9 || e.which==9){
+            e.preventDefault();
+            var s = e.target.selectionStart;
+            e.target.value = e.target.value.substring(0,e.target.selectionStart) + "\t" + e.target.value.substring(e.target.selectionEnd);
+            e.target.selectionEnd = s+1; 
+        }}}
       
       ></textarea>
 
