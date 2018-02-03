@@ -85,9 +85,12 @@ checkForAdditionalInfo(){
 
       this.props.history.push('/code');
     }
-    else 
+    else  if(a.status == 'ok' && a.data.length === 0)
     {
-        alert('unexpected error');
+       // alert(JSON.stringify(a));
+       
+    }else{
+        alert(JSON.stringify(a))
         window.location.reload();
     }
   });

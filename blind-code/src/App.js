@@ -62,7 +62,7 @@ var State={
   glotToken:'c5746811-352e-439e-82c8-4ca9dadb0eea',
 
   hasura_id:0,
- 
+
 }
   
 class App extends Component {
@@ -124,7 +124,7 @@ state={
 };
 
 
-startGame(){
+startGame(e){
 
 
   this.setState({
@@ -132,22 +132,37 @@ startGame(){
     loadingText :'Setting up'
   })
 
-  socket.emit('querydata',{
+  var data = {
     "type": "insert",
     "args": {
         "table": "game",
         "objects": [
             {
-                "userId": localStorage.userId,
-                "game_key": this.state.problem.secretKey
+                "userId": localStorage.hasura_id,
+                "game_key": e.secretKey
             }
         ],
         "returning": [
             "gameid"
         ]
     }
-},(a)=>{
+}
 
+
+alert(JSON.stringify(data))
+  socket.emit('querydata',data,(a)=>{
+
+  if(a.status === 'ok' && a.data.affected_rows === 1)
+  {
+
+    this.setState({
+      gameid : a.data.returning[0].gameid
+    })
+
+  }else{
+    alert(JSON.stringify(a));
+    window.location.reload();
+  }
 
   this.startTimer();
 
@@ -190,19 +205,21 @@ componentWillMount(){
 
 startTimer(){
 
-  this.setState(()=>{
+  this.setState({
+      clockTime : this.state.duration
+  },()=>{
 
-    return {
-      duration : this.state.clockTime
-    }
-  })
+    setInterval(()=>{
 
-  setInterval(()=>{
+      this.setState({
+        clockTime:this.state.clockTime-1
+      })}
+    ,1000)
+  });
+  
+  
 
-    this.setState({
-      clockTime:this.state.clockTime-1
-    })}
-  ,1000);
+ 
 }
 
 constructor(props){
@@ -222,9 +239,11 @@ constructor(props){
     return  <AskForSecretKey
       onQueLoaded = {(e)=>{
 
+        alert(JSON.stringify(e))
+
          this.setState({
            problem : e
-         })
+         },this.startGame(e))
       }}
       />
     }

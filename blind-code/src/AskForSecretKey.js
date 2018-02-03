@@ -95,8 +95,6 @@ class AskForSecretKey extends React.Component {
      
    }else {
 
-
-
     var b = {
        sampleIp : a.data[0]['game_set-problem'].sameIp,
        problemId : a.data[0]['game_set-problem'].problem_id,
@@ -104,7 +102,7 @@ class AskForSecretKey extends React.Component {
        problemDescp : a.data[0]['game_set-problem'].description,
        game_about : a.data[0].about,
        duration : a.data[0].duration,
-       secretKey : this.state.secretKey
+       secretKey : a.data[0].game_id
      };
      this.props.onQueLoaded(b)
    }
