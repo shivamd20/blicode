@@ -7,7 +7,7 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Switch from 'material-ui/Switch';
 import { FormControlLabel, FormGroup } from 'material-ui/Form';
-import Loading from './Loading'
+import Loading from './Loading';
 
 var socket;
 
@@ -90,6 +90,8 @@ checkForAdditionalInfo(){
        // alert(JSON.stringify(a));
        
     }else{
+
+        localStorage.clear();
         alert(JSON.stringify(a))
         window.location.reload();
     }
@@ -108,6 +110,12 @@ checkForAdditionalInfo(){
 
 
     componentWillMount(){
+
+        if(!localStorage.hasura_id){
+            this.props.history.push('/login');
+           // return;
+        }
+
         this.checkForAdditionalInfo();
     }
 

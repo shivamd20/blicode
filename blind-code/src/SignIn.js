@@ -118,7 +118,7 @@ onSignIn(email,password){
 componentWillMount(){
   if(localStorage.hasura_id && localStorage.info){
     this.props.history.push('/code');
-  }else if (!localStorage.hasura_id){
+  }else if (localStorage.hasura_id){
     this.props.history.push('/info');
   }
 }
