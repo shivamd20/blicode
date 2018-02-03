@@ -5,7 +5,6 @@ class ProblemArea extends Component {
 
     constructor(){
         super();
-
     }
 
     render(){
