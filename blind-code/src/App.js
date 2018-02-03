@@ -22,6 +22,7 @@ import { withRouter } from 'react-router-dom'
 import io from 'socket.io-client';
 import { dark } from 'material-ui/styles/createPalette';
 import AskForSecretKey from './AskForSecretKey';
+import Button from 'material-ui/Button';
 
 var socket ;
 
@@ -53,8 +54,6 @@ var State={
      }`,
   fileName:'fileName',
   clockTime:0,
-  duration:5000,
-  input: '1 2',
   fileName: 'Ramu.java',
 
   language: 'java',
@@ -79,6 +78,8 @@ state={
 
  onRun(){
 
+  console.log(this.state.problem)
+
  this.setState({
    running : true,
  })
@@ -96,7 +97,7 @@ state={
         "name":this.state.fileName,
         "content":this.state.code
       }],
-      'stdin':this.state.input
+      'stdin':this.state.problem.sampleIp || this.state.input
     },
 
   }
@@ -117,11 +118,14 @@ state={
         error : d.data.error
       })
 
+      this.printCode(d.data.stdout,'stdout')
+      this.printCode(this.state.problem.sampleOp,'sample')
+
     }
-    console.log(d);
   });
 
-};
+}
+
 
 
 startGame(e){
@@ -205,8 +209,10 @@ componentWillMount(){
 
 startTimer(){
 
+  
+
   this.setState({
-      clockTime : this.state.duration
+      clockTime : this.state.problem.duration * 60
   },()=>{
 
     setInterval(()=>{
@@ -222,18 +228,49 @@ startTimer(){
  
 }
 
+ printCode(str,name){
+
+  var index;
+
+  console.log(name)
+
+  if(!str)
+  {
+      str= "";
+  }
+
+for (index = 0; index < str.length; ++index) {
+  console.log( index + ": " + str.charCodeAt(index));
+}
+
+}
+
 constructor(props){
   super();
 
   socket = window.socket;
 
-
-
   // this.checkForAdditionalInfo();
 
 }
 
+goFullScreen(){
+  var elem = document.getElementsByTagName('html')[0]
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  } else if (elem.mozRequestFullScreen) {
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  }
+}
+
+
   render(props) {
+
+    
 
     if(!this.state.problem){
     return  <AskForSecretKey
@@ -241,12 +278,31 @@ constructor(props){
 
      //   alert(JSON.stringify(e))
 
+
          this.setState({
            problem : e
          },this.startGame(e))
+
       }}
       />
     }
+
+    if(!((window.fullScreen) ||
+   (window.innerWidth == window.screen.width && window.innerHeight == window.screen.height))) {
+
+    return <center style ={{
+      marginTop : '40vh',
+      backgroundColor : 'red'
+
+    }} >
+    
+    You have to be in the full screen to take this test <br/>
+
+    <Button raised onClick = {this.goFullScreen}> Go full Screen </Button>
+
+    </center>
+
+}
 
     return (
       <div>
@@ -254,7 +310,7 @@ constructor(props){
       <div >
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"/>
-        <AppBar result={this.state.result} name={this.state.name} time = {this.state.clockTime}/>
+        <AppBar result={this.state.result} name={this.state.name} time = { this.state.clockTime}/>
        
         <div style={{
           marginTop:'70px'
@@ -361,10 +417,12 @@ constructor(props){
         <RunResultArea 
        
         onRun = {this.onRun.bind(this)}
-
+       
         stdout = {this.state.stdout}
         stderr = {this.state.stderr}
         error = {this.state.error}
+        
+        sampleOp = {this.state.problem.sampleOp}
 
         running = {this.state.running}
 

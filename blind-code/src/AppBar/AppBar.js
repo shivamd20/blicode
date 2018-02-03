@@ -44,14 +44,14 @@ class MenuAppBar extends React.Component {
     this.setState({ anchorEl: null });
   };
 
-//   render(){
-    
-//             return <header className="AppBar">
-//             <Opponents/>
-//             <center class="title">CodeChamp</center>
-//             <Time/>
-//             </header>;
-//         }
+  //   render(){
+
+  //             return <header className="AppBar">
+  //             <Opponents/>
+  //             <center class="title">CodeChamp</center>
+  //             <Time/>
+  //             </header>;
+  //         }
 
   render() {
     const { classes } = this.props;
@@ -60,37 +60,37 @@ class MenuAppBar extends React.Component {
 
     return (
       <div className={classes.root}>
-      
+
         <AppBar position="fixed"
-        style={
-          {
-            top:0
+          style={
+            {
+              top: 0
+            }
           }
-        }
-        title="Blind Coding"
+          title="Blind Coding"
         >
           <Toolbar style={{
-              'background-color':'darkslategray',
-              textAlign:'center'
+            'background-color': 'darkslategray',
+            textAlign: 'center'
           }
           }>
 
-        
+
 
             {/* <IconButton className={classes.menuButton}  aria-label="Menu">
               <MenuIcon />
             </IconButton> */}
 
-            <Opponents result= {this.props.result} name = {this.props.name}/>
+            <Opponents result={this.props.result} name={this.props.name} />
             <Typography type="title" color="inherit" className={classes.flex}>
-          
-            <div className={classes.root}>
-            
+
+              <div className={classes.root}>
+
               </div>
               Blind Coding
             </Typography>
 
-            <Time time = {this.props.time}/>
+            <Time time={this.props.time} />
 
             {auth && (
               <div>
@@ -102,7 +102,7 @@ class MenuAppBar extends React.Component {
                 >
                   <AccountCircle />
                 </IconButton>
-            
+
 
                 <Menu
                   id="menu-appbar"
@@ -118,8 +118,11 @@ class MenuAppBar extends React.Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={()=>{
+                  <MenuItem onClick={
+
+                    () => {}
+                  }>Profile</MenuItem>
+                  <MenuItem onClick={() => {
 
                     localStorage.clear();
                     window.location.reload();

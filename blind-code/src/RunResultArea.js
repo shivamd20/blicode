@@ -12,6 +12,9 @@ class RunResultArea extends React.Component{
      
 
         return <div>
+
+   
+
            <Button color="primary" disabled={this.props.running} onClick={()=>{
 
             //lang,input,filename,version,code
@@ -23,16 +26,22 @@ class RunResultArea extends React.Component{
           </Button>
           <Button color="accent" disabled={this.props.isSubmitting}> submit</Button>
 
+
+          { this.props.stdout && (this.props.stdout == this.props.sampleOp ?  <div  style={{color : 'green'}}> <h3>Sample Test Case Passed </h3>{""}</div>  :  <div  style={{color : 'red'}}> <h3>Sample Test Case Failed </h3></div>)}
+ 
         
         
        { this.props.stdout &&  <div  style={{color : 'blue'}}> <h3>Output: </h3>{this.props.stdout}</div> }
        { this.props.stderr &&  <div  style={{color : 'red'}}> <h3>stderr</h3>{this.props.stderr}</div> }
        { this.props.error &&  <div  style={{color : 'red'}}> <h3>error</h3>{this.props.error}</div> }
 
-    
+      
+     
         
         </div>;
     }
 }
+
+
 
 export default RunResultArea;

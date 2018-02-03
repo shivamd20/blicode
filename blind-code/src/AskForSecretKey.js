@@ -43,6 +43,19 @@ class AskForSecretKey extends React.Component {
     socket = window.socket;
   }
 
+  goFullScreen(){
+    var elem = document.getElementsByTagName('html')[0]
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    }
+  }
+
   state = {}
 
   checkSecretKey(key){
@@ -160,6 +173,8 @@ class AskForSecretKey extends React.Component {
 
     onClick = {
       ()=>{
+
+        this.goFullScreen()
 
         if(!this.state.secretKey){
             this.setState({
