@@ -149,7 +149,7 @@ startGame(e){
 }
 
 
-alert(JSON.stringify(data))
+//alert(JSON.stringify(data))
   socket.emit('querydata',data,(a)=>{
 
   if(a.status === 'ok' && a.data.affected_rows === 1)
@@ -171,7 +171,7 @@ alert(JSON.stringify(data))
     loadingText :null
   })
 
-  alert(JSON.stringify(a))
+ // alert(JSON.stringify(a))
 
 });
   
@@ -199,7 +199,7 @@ componentWillMount(){
           }
         )
 
-        alert(JSON.stringify(info))
+     //   alert(JSON.stringify(info))
   }
 }
 
@@ -239,7 +239,7 @@ constructor(props){
     return  <AskForSecretKey
       onQueLoaded = {(e)=>{
 
-        alert(JSON.stringify(e))
+     //   alert(JSON.stringify(e))
 
          this.setState({
            problem : e
