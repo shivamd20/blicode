@@ -81,7 +81,7 @@ class MenuAppBar extends React.Component {
               <MenuIcon />
             </IconButton> */}
 
-            <Opponents result={this.props.result} name={this.props.name} />
+            <Opponents score={this.props.score} name={this.props.name} />
             <Typography type="title" color="inherit" className={classes.flex}>
 
               <div className={classes.root}>

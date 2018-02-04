@@ -11,7 +11,7 @@ class Home extends React.Component {
             width : '100%',
             overflow : 'hidden'}} frameborder="0"
             allowfullscreen sandbox >
-            <p> <a href="https://shivamd20.github.io/shankhacks/">
+            <p> <a target="_blank" href="https://shivamd20.github.io/shankhacks/">
                 Learn more
   </a> </p>
         </iframe>

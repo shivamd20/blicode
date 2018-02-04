@@ -24,7 +24,10 @@ class RunResultArea extends React.Component{
 
           {this.props.running && <CircularProgress size={20} />}
           </Button>
-          <Button color="accent" disabled={this.props.isSubmitting}> submit</Button>
+          <Button color="accent" disabled={this.props.isSubmitting} onClick = {()=>this.props.onSubmit()}> submit
+          
+          {this.props.isSubmitting && <CircularProgress size={20} />}
+          </Button>
 
 
           { this.props.stdout && (this.props.stdout == this.props.sampleOp ?  <div  style={{color : 'green'}}> <h3>Sample Test Case Passed </h3>{""}</div>  :  <div  style={{color : 'red'}}> <h3>Sample Test Case Failed </h3></div>)}

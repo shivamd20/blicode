@@ -10,7 +10,7 @@ class Opponents extends React.Component{
 render(){
     return <div className="Opponents">
 
-<Badge badgeContent={this.props.result} color="primary"><span>  {this.props.name} <Person/> </span> 
+<Badge badgeContent={this.props.score} color="primary"><span>  {this.props.name} <Person/> </span> 
  </Badge>
 
   {/* <Apps/> 
