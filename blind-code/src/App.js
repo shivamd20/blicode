@@ -48,7 +48,7 @@ var State = {
     public static void main(String ...args)
       {
        java.util.Scanner sc=new java.util.Scanner(System.in);
-       System.out.println(sc.nextInt()+sc.nextInt());
+       System.out.print(sc.nextInt()+sc.nextInt());
         sc.close();
             }
      }`,
@@ -162,7 +162,16 @@ class App extends Component {
         })
 
       } else {
-        alert(JSON.stringify(a));
+
+      
+
+        if(a.error && a.error.code === "postgres-error")
+        {
+          alert('Test already attempted')
+        }else{
+          alert(JSON.stringify(a));
+        }
+
         window.location.reload();
       }
 
@@ -358,7 +367,7 @@ class App extends Component {
         <div >
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
             rel="stylesheet" />
-          <AppBar result={this.state.result} name={this.state.name} time={this.state.clockTime} score={this.state.score} />
+          {/* <AppBar result={this.state.result} name={this.state.name} time={this.state.clockTime} score={this.state.score} /> */}
 
           <div style={{
             marginTop: '70px'
@@ -486,7 +495,7 @@ class App extends Component {
 
           </div>
           <footer>
-            Shivam Kumar Dwivedi <a href="https://github.com/shivamd20">Fork me on github</a>
+          &copy;  <a href="https://github.com/shivamd20">Shivam  Dwivedi</a>
           </footer>
         </div>
 

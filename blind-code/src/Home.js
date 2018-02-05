@@ -10,8 +10,8 @@ class Home extends React.Component {
             marginTop : '60px',
             width : '100%',
             overflow : 'hidden'}} frameborder="0"
-            allowfullscreen sandbox >
-            <p> <a target="_blank" href="https://shivamd20.github.io/shankhacks/">
+            allowfullscreen  >
+            <p> <a target='_parent' href="https://shivamd20.github.io/shankhacks/">
                 Learn more
   </a> </p>
         </iframe>
