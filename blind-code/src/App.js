@@ -215,6 +215,12 @@ class App extends Component {
 
       setInterval(() => {
 
+        if(this.state.clockTime === 0)
+        {
+          alert("Time over");
+          window.location.reload();
+        }
+
         this.setState({
           clockTime: this.state.clockTime - 1
         })

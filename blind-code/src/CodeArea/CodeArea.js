@@ -401,6 +401,7 @@ Custom Input  <Switch
           value={this.props.input}
           multiline={true}
           hidden = {this.state.customIp}
+          autoCapitalize="none" autoCorrect="off" autoComplete="off"
           // onChange={(e)=>{
           //   this.setState({
           //     input:e.target.value
