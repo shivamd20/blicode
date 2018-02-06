@@ -11,6 +11,7 @@ import App from './App';
 import Login from './SignIn';
 import Info from './AdditionalInformation';
 import Home from './Home';
+import LeaderBoard from './LeaderBoard';
 
 const socket = io('https://api.calk49.hasura-app.io');
 
@@ -36,21 +37,35 @@ class NewApp extends React.Component{
   render(){
  return <Router>
  
-    <div>
-      {/* <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/about">About</Link></li>
-        <li><Link to="/topics">Topics</Link></li>
-      </ul>
+    <div style={{
+   
+    //  overflow : 'hidden'
+    }}>
 
-      <hr/> */}
-      <UniversalAppBar/>
+     
+      {/* <UniversalAppBar/> */}
       <Route exact path="/" component={Home}/>
       <Route  path="/code" component={App}/>
       <Route path="/login" component={Login}/>
       <Route path="/info" component={Info}/>
+      <Route path="/leads" component={LeaderBoard}/>
+      <Route exact path="/logout" component={(props)=>{
+
+        localStorage.clear();
+
+        //history.pushState('/home')
+
+        return "logged out";
+
+      }}/>
+      
+
+
     </div>
+    
   </Router>
+
+  
   }
 }
 

@@ -143,7 +143,7 @@ class AskForSecretKey extends React.Component {
 <br/>
             <Typography type="title" id="modal-title">
               
-              Enter you Secret key
+              Enter your Secret key
 
             </Typography>
 
