@@ -23,6 +23,7 @@ import io from 'socket.io-client';
 import { dark } from 'material-ui/styles/createPalette';
 import AskForSecretKey from './AskForSecretKey';
 import Button from 'material-ui/Button';
+import Instructions from './Instructions';
 
 var socket;
 
@@ -367,7 +368,9 @@ class App extends Component {
         <div >
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
             rel="stylesheet" />
-          {/* <AppBar result={this.state.result} name={this.state.name} time={this.state.clockTime} score={this.state.score} /> */}
+         <AppBar result={this.state.result} name={this.state.name} time={this.state.clockTime} score={this.state.score} /> 
+
+         <Instructions about = {this.state.problem.game_about}/>
 
           <div style={{
             marginTop: '70px'

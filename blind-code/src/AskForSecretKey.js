@@ -31,7 +31,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
-    overflow : 'scroll',
+    overflow : 'auto',
   },
 });
 
@@ -140,6 +140,28 @@ class AskForSecretKey extends React.Component {
         >
           <div style={getModalStyle()} className={classes.paper}>
 
+          <Button
+    style={{
+      color : 'red',
+      textAlign : 'right',
+     
+      float : 'right'
+    }}
+
+    onClick = {
+      ()=>{
+
+        localStorage.clear();
+        window.location.reload();
+
+      }
+    }
+    >
+    
+    logout 
+
+    </Button>
+
 <br/>
             <Typography type="title" id="modal-title">
               
@@ -191,6 +213,9 @@ class AskForSecretKey extends React.Component {
     Submit 
 
     </Button>
+    
+
+   
 
 
   </center>

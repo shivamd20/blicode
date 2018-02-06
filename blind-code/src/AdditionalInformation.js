@@ -29,6 +29,8 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
         padding: theme.spacing.unit * 4,
+        scroll : 'auto',
+        maxHeight : '90vh'
     },
 });
 
@@ -206,7 +208,10 @@ onAdditionalInfoFilled(){
                             Please provide your following details
                 </Typography>
                         <Typography type="subheading" id="simple-modal-description">
-                        <center>
+                        <center  style={{
+                                    overflow : 'scroll',
+                                    maxHeight : '85vh'
+                                }}>
                         <TextField
                                 id="user_id"
                                 label="User id"
@@ -215,6 +220,7 @@ onAdditionalInfoFilled(){
                                 disabled
                                // onChange={this.handleChange('name')}
                                 margin="normal"
+                               
                             />
                             <br/>
                             <TextField
