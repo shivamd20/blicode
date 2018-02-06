@@ -98,6 +98,7 @@ class AskForSecretKey extends React.Component {
    
    if(a.error){
      alert('There is some error. Please refresh this page');
+     window.location.reload();
      return
    }
    else if(a.data.length === 0){

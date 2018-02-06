@@ -29,76 +29,75 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
         padding: theme.spacing.unit * 4,
-        scroll : 'auto',
-        maxHeight : '90vh'
+        overflow: 'auto',
+        maxHeight: '90vh'
     },
 });
 
 class AdditionalInfo extends React.Component {
 
-    constructor(){
+    constructor() {
         super();
         socket = window.socket;
-      }
+    }
 
 
-checkForAdditionalInfo(){
+    checkForAdditionalInfo() {
 
-    this.setState({
-      loading : true,
-      loadingText :'Check your information'
-    })
-  
-    socket.emit('querydata',{
-      "type": "select",
-      "args": {
-          "table": "user",
-          "columns": [
-              "*"
-          ],
-          "where": {
-              "user_id": {
-                  "$eq": localStorage.hasura_id
-              }
-          }
-      }
-  },(a)=>{
-  
-    this.setState({
-      loading : false,
-      loadingText :null
-    })
-  
-  //  alert(JSON.stringify(a))
-  
-    if(a.status == 'ok' && a.data.length === 1){
+        this.setState({
+            loading: true,
+            loadingText: 'Check your information'
+        })
 
-        localStorage.info = JSON.stringify( {
-            college :a.data[0].college,
-            branch:a.data[0].branch,
-            email:a.data[0].email,
-            mobile:a.data[0].mobile,
-            name:a.data[0].name,
-            semester:a.data[0].semester,
-            additional_info_filled : true
+        socket.emit('querydata', {
+            "type": "select",
+            "args": {
+                "table": "user",
+                "columns": [
+                    "*"
+                ],
+                "where": {
+                    "user_id": {
+                        "$eq": localStorage.hasura_id
+                    }
+                }
+            }
+        }, (a) => {
+
+            this.setState({
+                loading: false,
+                loadingText: null
+            })
+
+            //  alert(JSON.stringify(a))
+
+            if (a.status == 'ok' && a.data.length === 1) {
+
+                localStorage.info = JSON.stringify({
+                    college: a.data[0].college,
+                    branch: a.data[0].branch,
+                    email: a.data[0].email,
+                    mobile: a.data[0].mobile,
+                    name: a.data[0].name,
+                    semester: a.data[0].semester,
+                    additional_info_filled: true
                 })
-  
-      localStorage.additional_info_filled = true;
 
-      this.props.history.push('/code');
-    }
-    else  if(a.status == 'ok' && a.data.length === 0)
-    {
-       // alert(JSON.stringify(a));
-       
-    }else{
+                localStorage.additional_info_filled = true;
 
-        localStorage.clear();
-        alert(JSON.stringify(a))
-        window.location.reload();
+                this.props.history.push('/code');
+            }
+            else if (a.status == 'ok' && a.data.length === 0) {
+                // alert(JSON.stringify(a));
+
+            } else {
+
+                localStorage.clear();
+                alert(JSON.stringify(a))
+                window.location.reload();
+            }
+        });
     }
-  });
-  }
 
     state = {
         name: null,
@@ -106,73 +105,73 @@ checkForAdditionalInfo(){
         mobile: null,
         branch: null,
         semester: null,
-        email : localStorage.email,
-        user_id : localStorage.hasura_id
+        email: localStorage.email,
+        user_id: localStorage.hasura_id
     };
 
 
-    componentWillMount(){
+    componentWillMount() {
 
-        if(!localStorage.hasura_id){
+        if (!localStorage.hasura_id) {
             this.props.history.push('/login');
-           // return;
+            // return;
         }
 
         this.checkForAdditionalInfo();
     }
 
-onAdditionalInfoFilled(){
+    onAdditionalInfoFilled() {
 
-    const data = this.state;
+        const data = this.state;
 
-    this.setState({
-      loading : true,
-      loadingText :'Saving your info'
-    })
-  
-   // alert(JSON.stringify(data))
-    socket.emit('querydata',{
-      "type": "insert",
-      "args": {
-          "table": "user",
-          "objects": [
-              {
-                  "user_id": data.user_id,
-                  "email": data.email,
-                  "name": data.name,
-                  "College": data.College,
-                  "mobile": data.mobile,
-                  "branch": data.branch,
-                  "semester": data.semester,
-              }
-          ],
-          "returning": [
-              "user_id"
-          ],
-          " on_conflict ":'update'
-      }
-  },(a)=>{
-  
-    this.setState({
-      loading : false,
-      loadingText :null
-    })
-  
-    if(a.status == 'ok' ){
-  
-      this.checkForAdditionalInfo();
+        this.setState({
+            loading: true,
+            loadingText: 'Saving your info'
+        })
 
- //   alert('info successfully saved')
-  
+        // alert(JSON.stringify(data))
+        socket.emit('querydata', {
+            "type": "insert",
+            "args": {
+                "table": "user",
+                "objects": [
+                    {
+                        "user_id": data.user_id,
+                        "email": data.email,
+                        "name": data.name,
+                        "College": data.College,
+                        "mobile": data.mobile,
+                        "branch": data.branch,
+                        "semester": data.semester,
+                    }
+                ],
+                "returning": [
+                    "user_id"
+                ],
+                " on_conflict ": 'update'
+            }
+        }, (a) => {
+
+            this.setState({
+                loading: false,
+                loadingText: null
+            })
+
+            if (a.status == 'ok') {
+
+                this.checkForAdditionalInfo();
+
+                //   alert('info successfully saved')
+
+            }
+            else if (a.error.code === "postgres-error") {
+                alert('data already inserted')
+                window.location.reload();
+            }
+        });
+
     }
-    else if (a.error.code === "postgres-error"){
-      alert('data already inserted')
-      window.location.reload();
-    }
-  });
-  
-  }
-  
+
 
     handleOpen = () => {
         this.setState({ open: true });
@@ -192,8 +191,8 @@ onAdditionalInfoFilled(){
         const { classes } = this.props;
 
 
-     if(this.state.loading)
-     return <Loading open= {true} text = {this.state.loadingText}/>;
+        if (this.state.loading)
+            return <Loading open={true} text={this.state.loadingText} />;
 
         return (
             <center>
@@ -206,100 +205,129 @@ onAdditionalInfoFilled(){
                     <div style={getModalStyle()} className={classes.paper}>
                         <Typography type="title" id="modal-title">
                             Please provide your following details
+
                 </Typography>
                         <Typography type="subheading" id="simple-modal-description">
-                        <center  style={{
-                                    overflow : 'scroll',
-                                    maxHeight : '85vh'
-                                }}>
-                        <TextField
-                                id="user_id"
-                                label="User id"
-                                className={classes.textField}
-                                value={localStorage.hasura_id}
-                                disabled
-                               // onChange={this.handleChange('name')}
-                                margin="normal"
-                               
-                            />
-                            <br/>
-                            <TextField
-                                id="email"
-                                label="email"
-                                className={classes.textField}
-                                value={localStorage.email}
-                                disabled
-                               // onChange={this.handleChange('name')}
-                                margin="normal"
-                            />
-                            <br/>
-                            <TextField
-                                id="name"
-                                label="Name"
-                                className={classes.textField}
-                                value={this.state.name}
-                                onChange={this.handleChange('name')}
-                                margin="normal"
-                            />
-                            <br/>
-                            <TextField
-                                id="College"
-                                label="College"
-                                className={classes.textField}
-                                value={this.state.College}
-                                onChange={this.handleChange('College')}
-                                margin="normal"
-                            />
-                            <br/>
-                            <TextField
-                                id="semester"
-                                label="semester"
-                                className={classes.textField}
-                                value={this.state.semester}
-                                onChange={this.handleChange('semester')}
-                                margin="normal"
-                            />
-                            <br/>
-                            <TextField
-                                id="branch"
-                                label="branch"
-                                className={classes.textField}
-                                value={this.state.branch}
-                                onChange={this.handleChange('branch')}
-                                margin="normal"
-                            />
-                            <br/>
-                            <TextField
-                                id="mobile"
-                                label="mobile"
-                                className={classes.textField}
-                                value={this.state.mobile}
-                                onChange={this.handleChange('mobile')}
-                                margin="normal"
-                            />
-                            <br/>
+                            <center style={{
+                                overflow: 'auto',
+                                maxHeight: '85vh'
+                            }}>
 
-                            <Button raised
+                              
+                                <TextField
+                                    id="user_id"
+                                    label="User id"
+                                    className={classes.textField}
+                                    value={localStorage.hasura_id}
+                                    disabled
+                                    // onChange={this.handleChange('name')}
+                                    margin="normal"
 
-                            onClick = {()=>{
-                                if(this.state.branch && this.state.name && 
-                                this.state.mobile && this.state.College 
-                                && this.state.semester)
-                                this.onAdditionalInfoFilled()
-                                else {
-                                    alert('Incomplete Informaiton')
-                                }}}
+                                />
+                                <br />
+                                <TextField
+                                    id="email"
+                                    label="email"
+                                    className={classes.textField}
+                                    value={localStorage.email}
+                                    disabled
+                                    // onChange={this.handleChange('name')}
+                                    margin="normal"
+                                />
+                                <br />
+                                <TextField
+                                    id="name"
+                                    label="Name"
+                                    className={classes.textField}
+                                    value={this.state.name}
+                                    onChange={this.handleChange('name')}
+                                    margin="normal"
+                                />
+                                <br />
+                                <TextField
+                                    id="College"
+                                    label="College"
+                                    className={classes.textField}
+                                    value={this.state.College}
+                                    onChange={this.handleChange('College')}
+                                    margin="normal"
+                                />
+                                <br />
+                                <TextField
+                                    id="semester"
+                                    label="semester"
+                                    className={classes.textField}
+                                    value={this.state.semester}
+                                    onChange={this.handleChange('semester')}
+                                    margin="normal"
+                                />
+                                <br />
+                                <TextField
+                                    id="branch"
+                                    label="branch"
+                                    className={classes.textField}
+                                    value={this.state.branch}
+                                    onChange={this.handleChange('branch')}
+                                    margin="normal"
+                                />
+                                <br />
+                                <TextField
+                                    id="mobile"
+                                    label="mobile"
+                                    className={classes.textField}
+                                    value={this.state.mobile}
+                                    onChange={this.handleChange('mobile')}
+                                    margin="normal"
+                                />
+                                <br />
 
-                            style={
-                                {
-                                    color : 'black',
-                                    backgroundColor : 'skyblue'
-                                }
-                            }
-                            > 
-                           Submit
+                                <Button raised
+
+                                    onClick={() => {
+                                        if (this.state.branch && this.state.name &&
+                                            this.state.mobile && this.state.College
+                                            && this.state.semester)
+                                            this.onAdditionalInfoFilled()
+                                        else {
+                                            alert('Incomplete Informaiton')
+                                        }
+                                    }}
+
+                                    style={
+                                        {
+                                            color: 'black',
+                                            backgroundColor: 'skyblue'
+                                        }
+                                    }
+                                >
+                                    Submit
                             </Button>
+
+                            
                             </center>
+
+                            <Button
+                                    style={{
+                                        color: 'blue',
+                                        textAlign: 'right',
+
+                                        float: 'right'
+                                    }}
+
+                                    onClick={
+                                        () => {
+
+                                            localStorage.clear();
+                                            window.location.reload();
+
+                                        }
+                                    }
+                                >
+
+                                    logout
+
+    </Button>
+    <br/>
 
                         </Typography>
                     </div>
