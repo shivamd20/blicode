@@ -46,7 +46,7 @@ class AdditionalInfo extends React.Component {
 
         this.setState({
             loading: true,
-            loadingText: 'Check your information'
+            loadingText: 'Checking your information'
         })
 
         socket.emit('querydata', {
