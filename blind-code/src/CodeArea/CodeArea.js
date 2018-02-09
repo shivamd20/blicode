@@ -386,6 +386,9 @@ Custom Input  <Switch
           checked={this.state.customIp}
           onChange={()=>{
 
+     
+              this.props.onInputChange({target:{value : null}})
+            
             this.setState({
               customIp : !this.state.customIp
             })
