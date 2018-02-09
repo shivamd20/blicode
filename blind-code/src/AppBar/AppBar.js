@@ -11,6 +11,7 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import AccountCircle from 'material-ui-icons/AccountCircle';
+import Login from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 
 const styles = {
@@ -81,6 +82,8 @@ class MenuAppBar extends React.Component {
               <MenuIcon />
             </IconButton> */}
 
+            
+
             <Opponents score={this.props.score} name={this.props.name} /> 
             <Typography type="title" color="inherit" className={classes.flex}>
 
@@ -94,14 +97,14 @@ class MenuAppBar extends React.Component {
 
             {auth && (
               <div>
-                <IconButton
+              { localStorage.hasura_token ? <IconButton
                   aria-owns={open ? 'menu-appbar' : null}
                   aria-haspopup="true"
                   onClick={this.handleMenu}
                   color="contrast"
                 >
-                  <AccountCircle />
-                </IconButton>
+                 <AccountCircle /> 
+                </IconButton>: null}
 
 
                 <Menu
