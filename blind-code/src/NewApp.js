@@ -12,6 +12,7 @@ import Login from './SignIn';
 import Info from './AdditionalInformation';
 import Home from './Home';
 import LeaderBoard from './LeaderBoard';
+import Dashboard from './Dashboard';
 
 const socket = io('https://api.calk49.hasura-app.io');
 
@@ -49,6 +50,7 @@ class NewApp extends React.Component{
       <Route path="/login" component={Login}/>
       <Route path="/info" component={Info}/>
       <Route path="/leads" component={LeaderBoard}/>
+      <Route path="/dash" component={Dashboard}/>
       <Route exact path="/logout" component={(props)=>{
 
         localStorage.clear();

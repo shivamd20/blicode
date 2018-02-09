@@ -13,14 +13,14 @@ import Button from 'material-ui/Button/Button';
 const styles = theme => ({
     root: {
         backgroundColor: 'lightgray',
-        marginTop: '70px',
+      //  marginTop: '70px',
        
       
-        minHeight: '70vh',
+        minHeight: '70%',
 
         borderStyle: 'solid',
         borderColor: 'blue',
-        padding : '5px'
+        padding : '1px'
     },
 });
 
@@ -30,14 +30,7 @@ class LeaderBoard extends React.Component {
 
     state = {
 
-        leads: [{
-            "score": 6,
-            "College": "SSEC",
-            "semester": "7th",
-            "branch": "CSE",
-            "name": "Shivam Kumar Dwivedi",
-            "user_id": 27
-        }]
+        leads: []
 
     }
 
@@ -94,8 +87,8 @@ class LeaderBoard extends React.Component {
                marginTop:'100px',
                zIndex:1100
            }}>
-              <AppBar time = '11' name= {localStorage.info ? JSON.parse(localStorage.info).name: 'Not logged in'}/>
-             
+              {/* <AppBar time = '11' name= {localStorage.info ? JSON.parse(localStorage.info).name: 'Not logged in'}/>
+              */}
             You have to be logged in to see the leaderboard
              <Button style={
                  {color : 'white'}
@@ -115,7 +108,7 @@ class LeaderBoard extends React.Component {
         return (
             
             <center className={classes.root}>
-                <AppBar time = '11' name= {localStorage.info ? JSON.parse(localStorage.info).name: null}/>
+                {/* <AppBar time = '11' name= {localStorage.info ? JSON.parse(localStorage.info).name: null}/> */}
                 { <h2
                     style={{
                         backgroundColor: '#bdbdbd',
