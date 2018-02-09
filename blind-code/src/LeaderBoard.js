@@ -7,6 +7,7 @@ import PersonIcon from 'material-ui-icons/Person';
 import DraftsIcon from 'material-ui-icons/Drafts';
 import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import AppBar from './AppBar/AppBar';
 
 const styles = theme => ({
     root: {
@@ -86,7 +87,9 @@ class LeaderBoard extends React.Component {
     render() {
         const { classes } = this.props;
         return (
+            
             <center className={classes.root}>
+                <AppBar time = '11' name= {JSON.parse(localStorage.info).name}/>
                 { <h2
                     style={{
                         backgroundColor: '#bdbdbd',
