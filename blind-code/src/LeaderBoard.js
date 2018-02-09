@@ -84,14 +84,14 @@ class LeaderBoard extends React.Component {
 
         if(!localStorage.hasura_token){
            return <center style={{
-               marginTop:'100px',
                zIndex:1100
            }}>
               {/* <AppBar time = '11' name= {localStorage.info ? JSON.parse(localStorage.info).name: 'Not logged in'}/>
               */}
             You have to be logged in to see the leaderboard
              <Button style={
-                 {color : 'white'}
+                 {color : 'black',
+                 backgroundColor : 'gray'}
 
                  
              }

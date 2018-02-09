@@ -45,7 +45,7 @@ class NewApp extends React.Component{
 
      
       {/* <UniversalAppBar/> */}
-      <Route exact path="/" component={Home}/>
+      <Route exact path="/" component={Dashboard}/>
       <Route  path="/code" component={App}/>
       <Route path="/login" component={Login}/>
       <Route path="/info" component={Info}/>

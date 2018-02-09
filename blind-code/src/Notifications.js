@@ -25,7 +25,7 @@ function FolderList(props) {
           <Avatar>
             <EventNote />
           </Avatar>
-          <ListItemText primary="Blind Coding will start from tommorow. Brush up your coding skills. Best of luck" secondary="feb 9, 2018" />
+          <ListItemText primary="Blind Coding will start from tommorow. Brush up your coding skills. Best of luck" secondary="feb 10, 2018" />
         </ListItem>
         <ListItem>
           <Avatar>
