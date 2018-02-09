@@ -98,7 +98,7 @@ class App extends Component {
           "name": this.state.fileName,
           "content": this.state.code
         }],
-        'stdin': this.state.problem.sampleIp || this.state.input
+        'stdin':   this.state.input || this.state.problem.sampleIp
       },
 
     }
@@ -277,12 +277,17 @@ class App extends Component {
           console.log(e)
 
           if (!e.error && (e.status === 'ok')) {
+
+            alert("Submitted");
+
             this.setState({
               score: e.score,
               isSubmitting : false
             })
           }
           else {
+
+            alert("Submission failed");
            
 
             this.setState({
@@ -291,6 +296,9 @@ class App extends Component {
           }
         })
       } else {
+
+
+        alert("Submission failed");
 
 
         this.setState({
