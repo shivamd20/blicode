@@ -445,6 +445,7 @@ class App extends Component {
                       )
                     }}
                     onInputChange={(value) => {
+                      
                       this.setState(
                         {
                           input: value.target.value
@@ -492,6 +493,8 @@ class App extends Component {
                     stdout={this.state.stdout}
                     stderr={this.state.stderr}
                     error={this.state.error}
+
+                    input={this.state.input}
 
                     sampleOp={this.state.problem.sampleOp}
 
