@@ -29,7 +29,7 @@ class NewApp extends React.Component{
 
       console.log(localStorage.getItem("hasura_token"))
   
-      socket.emit('settoken' , localStorage.getItem("hasura_token"), (d)=>{console.log(d)});
+      socket.emit('settoken' , localStorage.getItem("hasura_token") || undefined, (d)=>{console.log(d)});
 
     });
   }
