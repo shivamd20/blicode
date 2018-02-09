@@ -53,16 +53,15 @@ class Instruction extends React.Component {
                 >
                     <div style={getModalStyle()} className={classes.paper}>
                         <Typography type="title" id="modal-title">
-                        { this.props.text || "Loading" }
+                         Instructions
                 </Typography>
                         <Typography type="subheading" id="simple-modal-description">
-                        <center>
+                       
                       
+                
                       {
                           this.props.about
                       }
-      
-                            </center>
 
                             <Button onClick = {()=>{
 
