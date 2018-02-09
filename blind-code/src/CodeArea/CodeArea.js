@@ -320,7 +320,7 @@ class CodeArea extends Component {
 
       />
 
-      <button onClick={() => {
+      {/* <button onClick={() => {
         this.setState({
           editorFilter: this.state.editorFilter ? undefined : 'blur(5px)'
         });
@@ -328,7 +328,7 @@ class CodeArea extends Component {
 
         toggle blur
 
- </button>
+ </button> */}
 
       {
         // editor
@@ -387,7 +387,7 @@ Custom Input  <Switch
           onChange={()=>{
 
      
-              this.props.onInputChange({target:{value : null}})
+              this.props.onInputChange({target:{value : ""}})
             
             this.setState({
               customIp : !this.state.customIp

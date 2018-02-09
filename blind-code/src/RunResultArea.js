@@ -30,7 +30,7 @@ class RunResultArea extends React.Component{
           </Button>
 
 
-          { this.props.stdout && (this.props.stdout == this.props.sampleOp ?  <div  style={{color : 'green'}}> <h3>Sample Test Case Passed </h3>{""}</div>  :  <div  style={{color : 'red'}}> <h3>Sample Test Case Failed </h3></div>)}
+          {(!this.props.input) && this.props.stdout && (this.props.stdout == this.props.sampleOp ?  <div  style={{color : 'green'}}> <h3>Sample Test Case Passed </h3>{""}</div>  :  <div  style={{color : 'red'}}> <h3>Sample Test Case Failed </h3></div>)}
  
         
         
