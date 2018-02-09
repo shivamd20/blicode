@@ -8,6 +8,7 @@ import DraftsIcon from 'material-ui-icons/Drafts';
 import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import AppBar from './AppBar/AppBar';
+import Button from 'material-ui/Button/Button';
 
 const styles = theme => ({
     root: {
@@ -55,16 +56,17 @@ class LeaderBoard extends React.Component {
 
         socket.emit('querydata', t, (a) => {
 
+            console.log(a)
+
 
             if (a.data) {
 
                 this.setState({leads :a.data});
 
-                console.log(a)
 
             } else if (a.error) {
                 alert('error in fetching leaderboard')
-                console.log(a)
+ 
             }
 
 
@@ -86,10 +88,34 @@ class LeaderBoard extends React.Component {
 
     render() {
         const { classes } = this.props;
+
+        if(!localStorage.hasura_token){
+           return <center style={{
+               marginTop:'100px',
+               zIndex:1100
+           }}>
+              <AppBar time = '11' name= {localStorage.info ? JSON.parse(localStorage.info).name: 'Not logged in'}/>
+             
+            You have to be logged in to see the leaderboard
+             <Button style={
+                 {color : 'white'}
+
+                 
+             }
+             onClick={()=>{
+
+                 window.location.hash = '/login';
+                     
+                    }}
+             > 
+                Go to sign in page
+            </Button></center>
+        }
+
         return (
             
             <center className={classes.root}>
-                <AppBar time = '11' name= {JSON.parse(localStorage.info).name}/>
+                <AppBar time = '11' name= {localStorage.info ? JSON.parse(localStorage.info).name: null}/>
                 { <h2
                     style={{
                         backgroundColor: '#bdbdbd',
@@ -189,7 +215,7 @@ class LeaderBoard extends React.Component {
       </Table>
     </Paper>
 
-            </center>
+            </center> 
         );
     }
 }
