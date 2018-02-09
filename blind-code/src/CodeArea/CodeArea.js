@@ -292,7 +292,8 @@ class CodeArea extends Component {
     theme: 'monokai',
     mode: 'java',
     fontSize: 14,
-    customIp: false
+    customIp: false,
+    editorFilter : 'blur(5px)'
   };
 
 
