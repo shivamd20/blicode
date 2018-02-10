@@ -354,6 +354,8 @@ class CodeArea extends Component {
             var s = e.target.selectionStart;
             e.target.value = e.target.value.substring(0, e.target.selectionStart) + "\t" + e.target.value.substring(e.target.selectionEnd);
             e.target.selectionEnd = s + 1;
+
+            this.props.onCodeChange(e)
           }
         }}
         multiline = {true  }
