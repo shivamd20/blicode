@@ -70,7 +70,7 @@ class UniversalAppBar extends React.Component {
         >
           <Toolbar style={{
             'background-color': 'darkslategray',
-            color : 'black'
+            color : 'white'
           }
           }>
           

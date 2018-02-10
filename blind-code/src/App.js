@@ -44,15 +44,7 @@ var State = {
 
   name: 'name',
   result: 0,
-  code: `
-  public class Ramu{
-    public static void main(String ...args)
-      {
-       java.util.Scanner sc=new java.util.Scanner(System.in);
-       System.out.print(sc.nextInt()+sc.nextInt());
-        sc.close();
-            }
-     }`,
+  code: ``,
   fileName: 'fileName',
   clockTime: 0,
   fileName: 'Ramu.java',
