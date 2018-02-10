@@ -16,33 +16,47 @@ const styles = theme => ({
   },
 });
 
-function FolderList(props) {
-  const { classes } = props;
+class FolderList extends React.Component{
+
+  state = {
+
+      notif:[{
+        desc :'Blind Coding will start from tommorow. Brush up your coding skills. Best of luck',
+        date : 'feb 10, 2018'
+      },
+      {
+        desc :"Demo keys released. they are 'test' 'test1' 'test3' ",
+        date : 'feb 10, 2018'
+      },
+      {
+        desc :"We are inviting you to a scheduled meeting for Blind Coding. Topic: Blind Coding Meetup Time: Feb 10, 2018 6:30 PM India Join from PC, Mac, Linux, iOS or Android: zoom.us/j/504501877 Meeting ID: 504 501 877 ",
+        date : 'feb 10, 2018'
+      }]
+  }
+
+  render(){
+  const { classes } = this.props;
   return (
     <div className={classes.root}>
-      <List>
-        <ListItem>
+      <List>   
+          
+          {
+            this.state.notif.map((data)=>{
+            return  <ListItem>
           <Avatar>
             <EventNote />
           </Avatar>
-          <ListItemText primary="Blind Coding will start from tommorow. Brush up your coding skills. Best of luck" secondary="feb 10, 2018" />
+          <ListItemText primary={data.desc} secondary={data.date} />
         </ListItem>
-        <ListItem>
-          <Avatar>
-            <EventNote />
-          </Avatar>
-          <ListItemText primary="Demo keys released. they are 'test' 'test1' 'test3' " secondary="Feb 9, 2018" />
-        </ListItem>
-        <ListItem>
-          <Avatar>
-            <EventNote/>
-          </Avatar>
-          <ListItemText primary="We are inviting you to a scheduled meeting for Blind Coding. Topic: Blind Coding Meetup Time: Feb 10, 2018 6:30 PM India Join from PC, Mac, Linux, iOS or Android: zoom.us/j/504501877 Meeting ID: 504 501 877 " secondary="July 20, 2014" />
-        </ListItem>
+
+            })
+          }
+
+      
       </List>
     </div>
   );
-}
+}}
 
 FolderList.propTypes = {
   classes: PropTypes.object.isRequired,

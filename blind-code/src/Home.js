@@ -8,7 +8,7 @@ class Home extends React.Component {
         return <iframe src="https://shivamd20.github.io/shankhacks/"
             style={{
                 
-                height : '82vh',
+                height : '90vh',
             
             position:'relative',
             width : '100%',

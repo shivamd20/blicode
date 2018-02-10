@@ -70,9 +70,10 @@ class UniversalAppBar extends React.Component {
         >
           <Toolbar style={{
             'background-color': 'darkslategray',
-            textAlign: 'center'
+            color : 'black'
           }
           }>
+          
 
 
 
@@ -88,6 +89,9 @@ class UniversalAppBar extends React.Component {
               </div>
               Blind Coding
             </Typography>
+            {
+            this.props.children
+          }
 
             {/* <Time time={this.props.time} /> */}
 
