@@ -22,7 +22,16 @@ class FolderList extends React.Component{
 
   state = {
 
-      notif:[ {
+      notif:[ 
+        
+        {
+          desc :"Blind Coding event is now proudly sponsered by IntelliCode",
+           date : 'feb 10, 2018',
+           link : "http://www.intelli.in/",
+           linkText : 'Visit site'
+        },
+
+        {
         desc :"Join slack. We will be handling all the queries there. Click on the link",
          date : 'feb 10, 2018',
          link : "https://join.slack.com/t/codeclubsstc/shared_invite/enQtMzEzMTIxMTg1NDkxLTI4Mzc5ODBiMjkxN2ZiMjM1NDAyYzFjMjEzN2RhMTQ2MmNkZjg5YzRkZjdiZWRjNTVhOTZkM2QzODA2YzAwNzM",
